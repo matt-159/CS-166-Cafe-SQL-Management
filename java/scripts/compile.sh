@@ -14,7 +14,7 @@ javac -d $DIR/java/classes $DIR/java/src/Cafe.java
 
 #run the java program
 #Use your database name, port number and login
-java -cp $DIR/java/classes:$DIR/java/lib/pg73jdbc3.jar Cafe ${1} ${2} ${3}
+java -cp $DIR/java/classes:$DIR/java/lib/postgresql-42.3.6.jar Cafe ${1} ${2} ${3} ${4} ${5}
 
 sleep 10
 

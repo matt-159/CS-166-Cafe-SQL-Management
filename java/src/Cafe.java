@@ -48,12 +48,12 @@ public class Cafe {
     * @param password the user login password
     * @throws java.sql.SQLException when failed to make a connection.
     */
-   public Cafe(String dbname, String dbport, String user, String passwd) throws SQLException {
+   public Cafe(String host, String dbname, String dbport, String user, String passwd) throws SQLException {
 
       System.out.print("Connecting to database...");
       try{
          // constructs the connection URL
-         String url = "jdbc:postgresql://localhost:" + dbport + "/" + dbname;
+         String url = "jdbc:postgresql://" + host + ":" + dbport + "/" + dbname;
          System.out.println ("Connection URL: " + url + "\n");
 
          // obtain a physical connection
@@ -226,12 +226,13 @@ public class Cafe {
     * @param args the command line arguments this inclues the <mysql|pgsql> <login file>
     */
    public static void main (String[] args) {
-      if (args.length != 3) {
+      System.out.println(args.length);
+      if (args.length != 5) {
          System.err.println (
             "Usage: " +
             "java [-classpath <classpath>] " +
             Cafe.class.getName () +
-            " <dbname> <port> <user>");
+            " <host> <dbname> <port> <user> <password>");
          return;
       }//end if
 
@@ -242,10 +243,13 @@ public class Cafe {
          Class.forName ("org.postgresql.Driver").newInstance ();
          // instantiate the Cafe object and creates a physical
          // connection.
-         String dbname = args[0];
-         String dbport = args[1];
-         String user = args[2];
-         esql = new Cafe (dbname, dbport, user, "");
+         String dbhost = args[0];
+         String dbname = args[1];
+         String dbport = args[2];
+         String user = args[3];
+         String password = args[4];
+
+         esql = new Cafe (dbhost, dbname, dbport, user, password);
 
          boolean keepon = true;
          while(keepon) {

@@ -1,0 +1,13 @@
+<project default="compile">
+    <target name="compile">
+        <mkdir dir="bin"/>
+        <javac srcdir="java/src" destdir="bin"/>
+    </target>
+    <target name="run">
+        <java classpath="bin/" classname="CafeServer" fork="yes"/>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+        <delete dir="out"/>
+    </target>
+</project>

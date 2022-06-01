@@ -17,8 +17,6 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.io.File;
-import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -29,7 +27,7 @@ import java.util.ArrayList;
  * work with PostgreSQL JDBC drivers.
  *
  */
-public class Cafe {
+public class CafeServer {
 
    // reference to physical database connection.
    private Connection _connection = null;
@@ -48,7 +46,7 @@ public class Cafe {
     * @param password the user login password
     * @throws java.sql.SQLException when failed to make a connection.
     */
-   public Cafe(String host, String dbname, String dbport, String user, String passwd) throws SQLException {
+   public CafeServer(String host, String dbname, String dbport, String user, String passwd) throws SQLException {
 
       System.out.print("Connecting to database...");
       try{
@@ -231,13 +229,13 @@ public class Cafe {
          System.err.println (
             "Usage: " +
             "java [-classpath <classpath>] " +
-            Cafe.class.getName () +
+            CafeServer.class.getName () +
             " <host> <dbname> <port> <user> <password>");
          return;
       }//end if
 
       Greeting();
-      Cafe esql = null;
+      CafeServer esql = null;
       try{
          // use postgres JDBC driver.
          Class.forName ("org.postgresql.Driver").newInstance ();
@@ -249,7 +247,7 @@ public class Cafe {
          String user = args[3];
          String password = args[4];
 
-         esql = new Cafe (dbhost, dbname, dbport, user, password);
+         esql = new CafeServer(dbhost, dbname, dbport, user, password);
 
          boolean keepon = true;
          while(keepon) {
@@ -334,7 +332,7 @@ public class Cafe {
    /*
     * Creates a new user with privided login, passowrd and phoneNum
     **/
-   public static void CreateUser(Cafe esql){
+   public static void CreateUser(CafeServer esql){
       try{
          System.out.print("\tEnter user login: ");
          String login = in.readLine();
@@ -346,7 +344,7 @@ public class Cafe {
 	    String type="Customer";
 	    String favItems="";
 
-				 String query = String.format("INSERT INTO USERS (phoneNum, login, password, favItems, type) VALUES ('%s','%s','%s','%s','%s')", phone, login, password, favItems, type);
+        String query = String.format("INSERT INTO USERS (phoneNum, login, password, favItems, type) VALUES ('%s','%s','%s','%s','%s')", phone, login, password, favItems, type);
 
          esql.executeUpdate(query);
          System.out.println ("User successfully created!");
@@ -360,7 +358,7 @@ public class Cafe {
     * Check log in credentials for an existing user
     * @return User login or null is the user does not exist
     **/
-   public static String LogIn(Cafe esql){
+   public static String LogIn(CafeServer esql){
       try{
          System.out.print("\tEnter user login: ");
          String login = in.readLine();
@@ -380,13 +378,14 @@ public class Cafe {
 
 // Rest of the functions definition go in here
 
-  public static void Menu(Cafe esql){}
+  public static void Menu(CafeServer esql){}
 
-  public static void UpdateProfile(Cafe esql){}
+  public static void UpdateProfile(CafeServer esql){}
 
-  public static void PlaceOrder(Cafe esql){}
+  public static void PlaceOrder(CafeServer esql){}
 
-  public static void UpdateOrder(Cafe esql){}
+  public static void UpdateOrder(CafeServer esql){}
 
-}//end Cafe
+}
+//end Cafe
 

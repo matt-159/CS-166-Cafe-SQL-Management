@@ -11,6 +11,8 @@
  */
 
 
+import javax.swing.*;
+import java.io.PrintStream;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.Statement;
@@ -224,6 +226,22 @@ public class CafeServer {
     * @param args the command line arguments this inclues the <mysql|pgsql> <login file>
     */
    public static void main (String[] args) {
+
+      JTextArea text = new JTextArea();
+
+      PrintStream printStream = new PrintStream(new TextAreaOutputStream(text));
+      System.setOut(printStream);
+      System.setErr(printStream);
+
+      javax.swing.SwingUtilities.invokeLater(() -> {
+         CafeApplication app = new CafeApplication();
+
+         app.frameInit();
+//            app.pack();
+         app.add(text);
+         app.setVisible(true);
+      });
+
       System.out.println(args.length);
       if (args.length != 5) {
          System.err.println (
@@ -238,7 +256,9 @@ public class CafeServer {
       CafeServer esql = null;
       try{
          // use postgres JDBC driver.
-         Class.forName ("org.postgresql.Driver").newInstance ();
+         System.out.println("asdf");
+         Class.forName("org.postgresql.Driver").newInstance();
+         System.out.println("test");
          // instantiate the Cafe object and creates a physical
          // connection.
          String dbhost = args[0];
@@ -287,6 +307,7 @@ public class CafeServer {
             }
          }//end while
       }catch(Exception e) {
+         System.out.println("oof");
          System.err.println (e.getMessage ());
       }finally{
          // make sure to cleanup the created table and close the connection.

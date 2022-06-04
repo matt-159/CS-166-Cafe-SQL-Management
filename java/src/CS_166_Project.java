@@ -10,27 +10,13 @@
  *
  */
 
-
+import gui.CafeApplication;
 import util.CafeSQLManager;
 import util.TextAreaOutputStream;
 
 import javax.swing.*;
 import java.io.PrintStream;
-import java.sql.DriverManager;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.List;
-import java.util.ArrayList;
 
-/**
- * This class defines a simple embedded SQL utility class that is designed to
- * work with PostgreSQL JDBC drivers.
- */
 public class CS_166_Project {
 
     public static void main(String[] args) {
@@ -51,10 +37,6 @@ public class CS_166_Project {
             CafeSQLManager.init(dbhost, dbname, dbport, user, password);
 
             CafeApplication app = new CafeApplication();
-
-            app.frameInit();
-//            app.add(text);
-            app.setVisible(true);
 
             app.run();
         });

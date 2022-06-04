@@ -1,10 +1,15 @@
 <project default="compile">
     <target name="compile">
         <mkdir dir="bin"/>
-        <javac srcdir="java/src" destdir="bin"/>
+        <javac srcdir="java/src"
+               destdir="bin"
+        />
     </target>
     <target name="run">
-        <java classpath="bin/" classname="CafeServer" fork="yes"/>
+        <java classpath="bin:java/lib/postgresql-42.3.6.jar"
+              classname="CafeServer"
+              fork="yes"
+        />
     </target>
     <target name="clean">
         <delete dir="bin"/>

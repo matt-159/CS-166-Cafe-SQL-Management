@@ -1,3 +1,7 @@
+package gui;
+
+import util.CafeSQLManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;

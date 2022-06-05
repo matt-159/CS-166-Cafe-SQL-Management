@@ -97,31 +97,37 @@ public final class CafeSQLManager {
         return -1;
     }
 
-    public static List<List<String>> resultsToList(ResultSet rs) throws SQLException {
-        ResultSetMetaData rsmd = rs.getMetaData();
+    public static List<List<String>> resultsToList(ResultSet rs) {
 
-        int cols = rsmd.getColumnCount();
+        List<List<String>> list = null;
 
-        List<List<String>> list = new ArrayList<>();
+        try {
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cols = rsmd.getColumnCount();
+            boolean addColumnHeaders = true;
 
+            while (rs.next()) {
+                list = new ArrayList<>();
+                List<String> row = new ArrayList<>(cols);
 
-        List<String> row = new ArrayList<>(cols);
-        for (int i = 1; i <= cols; i++) {
+                if (addColumnHeaders) {
+                    for (int i = 1; i <= cols; i++) {
+                        row.add(rsmd.getColumnName(i));
+                    }
+                    list.add(row);
 
-            row.add(rsmd.getColumnName(i));
-        }
-        list.add(row);
+                    row.clear();
+                    addColumnHeaders = false;
+                }
 
-        rs.next();
-
-        do {
-            row = new ArrayList<>(cols);
-
-            for (int i = 1; i <= cols; i++) {
-                row.add(rs.getString(i));
+                for (int i = 1; i <= cols; i++) {
+                    row.add(rs.getString(i));
+                }
+                list.add(row);
             }
-            list.add(row);
-        } while (rs.next());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return list;
     }
@@ -131,6 +137,10 @@ public final class CafeSQLManager {
     }
 
     public static void printResultSetList(List<List<String>> rsList, boolean printColumnHeaders) {
+        if (rsList == null) {
+            return;
+        }
+
         if (!printColumnHeaders) {
             rsList.remove(0);
         }
@@ -159,7 +169,7 @@ public final class CafeSQLManager {
         List<List<String>> results = executeQuery(query);
         printResultSetList(results);
 
-        return results.size() > 0 ? username : null;
+        return (results != null && results.size() > 0) ? username : null;
     }
 
     public static void createUser(String phone, String login, String password, String favItems, String type) {

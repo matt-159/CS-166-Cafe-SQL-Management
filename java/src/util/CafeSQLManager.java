@@ -2,6 +2,8 @@ package util;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 public final class CafeSQLManager {
@@ -33,55 +35,25 @@ public final class CafeSQLManager {
         }
     }
 
-    public static String login(String username, String password) {
-
-        String query = String.format("SELECT * FROM USERS WHERE login = '%s' AND password = '%s'", username, password);
-
-        ResultSet results = executeQuery(query);
-
-        return countResults(results) > 0 ? username : null;
-    }
-
-    public static void createUser(String phone, String login, String password, String favItems, String type) {
-        String query = String.format("INSERT INTO USERS (phoneNum, login, password, favItems, type) VALUES ('%s','%s','%s','%s','%s')", phone, login, password, favItems, type);
-
-        executeUpdate(query);
-    }
-
-    private static int countResults(ResultSet results) {
-        if (results == null) {
-            return 0;
-        }
-
-        int count = 0;
-
-        try {
-            while (results.next()) {
-                count++;
-            }
-        } catch (Throwable ignored) {}
-
-        return count;
-    }
-
     /**
      * Method to execute an input query SQL instruction (i.e. SELECT).  This
-     * method issues the query to the DBMS and returns the number of results
+     * method issues the query to the DBMS and returns a list of the results
      *
      * @param query the input query string
-     * @return the number of rows returned
-     * @throws java.sql.SQLException when failed to execute the query
+     * @return a list representing the ResultSet of the query
      */
-    public static ResultSet executeQuery(String query) {
-        ResultSet results = null;
+    public static List<List<String>> executeQuery(String query) {
+        List<List<String>> results = null;
 
         try {
             Statement statement = connection.createStatement();
 
-            results = statement.executeQuery(query);
+            results = resultsToList(statement.executeQuery(query));
 
             statement.close();
-        } catch (Throwable ignored) {}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return results;
     }
@@ -91,7 +63,6 @@ public final class CafeSQLManager {
      * includes CREATE, INSERT, UPDATE, DELETE, and DROP.
      *
      * @param sql the input SQL string
-     * @throws java.sql.SQLException when update failed
      */
     public static void executeUpdate(String sql) {
         try {
@@ -107,86 +78,6 @@ public final class CafeSQLManager {
             e.printStackTrace();
         }
     }
-
-    /**
-     * Method to execute an input query SQL instruction (i.e. SELECT).  This
-     * method issues the query to the DBMS and outputs the results to
-     * standard out.
-     *
-     * @param query the input query string
-     * @return the number of rows returned
-     * @throws java.sql.SQLException when failed to execute the query
-     */
-    public static int executeQueryAndPrintResult(String query) throws SQLException {
-        // creates a statement object
-        Statement stmt = connection.createStatement();
-
-        // issues the query instruction
-        ResultSet rs = stmt.executeQuery(query);
-
-        /*
-         ** obtains the metadata object for the returned result set.  The metadata
-         ** contains row and column info.
-         */
-        ResultSetMetaData rsmd = rs.getMetaData();
-        int numCol = rsmd.getColumnCount();
-        int rowCount = 0;
-
-        // iterates through the result set and output them to standard out.
-        boolean outputHeader = true;
-        while (rs.next()) {
-            if (outputHeader) {
-                for (int i = 1; i <= numCol; i++) {
-                    System.out.print(rsmd.getColumnName(i) + "\t");
-                }
-                System.out.println();
-                outputHeader = false;
-            }
-            for (int i = 1; i <= numCol; ++i)
-                System.out.print(rs.getString(i) + "\t");
-            System.out.println();
-            ++rowCount;
-        }//end while
-        stmt.close();
-        return rowCount;
-    }//end executeQuery
-
-    /**
-     * Method to execute an input query SQL instruction (i.e. SELECT).  This
-     * method issues the query to the DBMS and returns the results as
-     * a list of records. Each record in turn is a list of attribute values
-     *
-     * @param query the input query string
-     * @return the query result as a list of records
-     * @throws java.sql.SQLException when failed to execute the query
-     */
-    public static List<List<String>> executeQueryAndReturnResult(String query) throws SQLException {
-        // creates a statement object
-        Statement stmt = connection.createStatement();
-
-        // issues the query instruction
-        ResultSet rs = stmt.executeQuery(query);
-
-        /*
-         ** obtains the metadata object for the returned result set.  The metadata
-         ** contains row and column info.
-         */
-        ResultSetMetaData rsmd = rs.getMetaData();
-        int numCol = rsmd.getColumnCount();
-        int rowCount = 0;
-
-        // iterates through the result set and saves the data returned by the query.
-        boolean outputHeader = false;
-        List<List<String>> result = new ArrayList<List<String>>();
-        while (rs.next()) {
-            List<String> record = new ArrayList<String>();
-            for (int i = 1; i <= numCol; ++i)
-                record.add(rs.getString(i));
-            result.add(record);
-        }//end while
-        stmt.close();
-        return result;
-    }//end executeQueryAndReturnResult
 
     /**
      * Method to fetch the last value from sequence. This
@@ -206,4 +97,74 @@ public final class CafeSQLManager {
         return -1;
     }
 
+    public static List<List<String>> resultsToList(ResultSet rs) throws SQLException {
+        ResultSetMetaData rsmd = rs.getMetaData();
+
+        int cols = rsmd.getColumnCount();
+
+        List<List<String>> list = new ArrayList<>();
+
+
+        List<String> row = new ArrayList<>(cols);
+        for (int i = 1; i <= cols; i++) {
+
+            row.add(rsmd.getColumnName(i));
+        }
+        list.add(row);
+
+        rs.next();
+
+        do {
+            row = new ArrayList<>(cols);
+
+            for (int i = 1; i <= cols; i++) {
+                row.add(rs.getString(i));
+            }
+            list.add(row);
+        } while (rs.next());
+
+        return list;
+    }
+
+    public static void printResultSetList(List<List<String>> rsList) {
+        printResultSetList(rsList, false);
+    }
+
+    public static void printResultSetList(List<List<String>> rsList, boolean printColumnHeaders) {
+        if (!printColumnHeaders) {
+            rsList.remove(0);
+        }
+
+        int maxLength = rsList.stream()
+                .flatMap(Collection::stream)
+                .max(Comparator.comparingInt(s -> s.trim().length()))
+                .orElse("").length();
+
+        System.out.println("maxLength = " + maxLength);
+
+        rsList.forEach(list -> {
+            list.forEach(s -> {
+                String format = "%-" + maxLength + "s ";
+                System.out.printf(format, s.trim());
+            });
+            System.out.println();
+        });
+    }
+
+    public static String login(String username, String password) {
+
+        String query = String.format("SELECT * FROM USERS WHERE login = '%s' AND password = '%s'", username, password);
+        System.out.println(query);
+
+        List<List<String>> results = executeQuery(query);
+        printResultSetList(results);
+
+        return results.size() > 0 ? username : null;
+    }
+
+    public static void createUser(String phone, String login, String password, String favItems, String type) {
+        String query = String.format("INSERT INTO USERS (phoneNum, login, password, favItems, type) VALUES ('%s','%s','%s','%s','%s')", phone, login, password, favItems, type);
+
+        executeUpdate(query);
+    }
 }

@@ -1,5 +1,7 @@
 package util;
 
+import data.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,20 +37,25 @@ public final class CafeSQLManager {
         }
     }
 
+    public static List<List<String>> executeQuery(String query) {
+        return executeQuery(query, false);
+    }
+
     /**
      * Method to execute an input query SQL instruction (i.e. SELECT).  This
      * method issues the query to the DBMS and returns a list of the results
      *
      * @param query the input query string
+     * @param includeColumnHeaders boolean choice to include column labels in the result set
      * @return a list representing the ResultSet of the query
      */
-    public static List<List<String>> executeQuery(String query) {
+    public static List<List<String>> executeQuery(String query, boolean includeColumnHeaders) {
         List<List<String>> results = null;
 
         try {
             Statement statement = connection.createStatement();
 
-            results = resultsToList(statement.executeQuery(query));
+            results = resultsToList(statement.executeQuery(query), includeColumnHeaders);
 
             statement.close();
         } catch (SQLException e) {
@@ -64,19 +71,22 @@ public final class CafeSQLManager {
      *
      * @param sql the input SQL string
      */
-    public static void executeUpdate(String sql) {
+    public static boolean executeUpdate(String sql) {
+        boolean wasSuccess = false;
+
         try {
-            // creates a statement object
             Statement stmt = connection.createStatement();
 
-            // issues the update instruction
             stmt.executeUpdate(sql);
 
-            // close the instruction
             stmt.close();
+
+            wasSuccess = true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return wasSuccess;
     }
 
     /**
@@ -98,26 +108,29 @@ public final class CafeSQLManager {
     }
 
     public static List<List<String>> resultsToList(ResultSet rs) {
+        return resultsToList(rs, false);
+    }
+
+    public static List<List<String>> resultsToList(ResultSet rs, boolean includeColumnHeaders) {
 
         List<List<String>> list = null;
 
         try {
             ResultSetMetaData rsmd = rs.getMetaData();
             int cols = rsmd.getColumnCount();
-            boolean addColumnHeaders = true;
+            list = new ArrayList<>();
 
             while (rs.next()) {
-                list = new ArrayList<>();
                 List<String> row = new ArrayList<>(cols);
 
-                if (addColumnHeaders) {
+                if (includeColumnHeaders) {
                     for (int i = 1; i <= cols; i++) {
                         row.add(rsmd.getColumnName(i));
                     }
                     list.add(row);
 
                     row.clear();
-                    addColumnHeaders = false;
+                    includeColumnHeaders = false;
                 }
 
                 for (int i = 1; i <= cols; i++) {
@@ -141,7 +154,7 @@ public final class CafeSQLManager {
             return;
         }
 
-        if (!printColumnHeaders) {
+        if (!printColumnHeaders && rsList.size() > 0) {
             rsList.remove(0);
         }
 
@@ -161,20 +174,23 @@ public final class CafeSQLManager {
         });
     }
 
-    public static String login(String username, String password) {
+    public static User login(String username, String password) {
 
         String query = String.format("SELECT * FROM USERS WHERE login = '%s' AND password = '%s'", username, password);
         System.out.println(query);
 
-        List<List<String>> results = executeQuery(query);
-        printResultSetList(results);
+        List<List<String>> results = executeQuery(query, true);
 
-        return (results != null && results.size() > 0) ? username : null;
+        if (results != null) {
+            printResultSetList(results, true);
+        }
+
+        return (results != null && results.size() > 0) ? new User(results.get(0)) : null;
     }
 
-    public static void createUser(String phone, String login, String password, String favItems, String type) {
+    public static boolean createUser(String phone, String login, String password, String favItems, String type) {
         String query = String.format("INSERT INTO USERS (phoneNum, login, password, favItems, type) VALUES ('%s','%s','%s','%s','%s')", phone, login, password, favItems, type);
 
-        executeUpdate(query);
+        return executeUpdate(query);
     }
 }

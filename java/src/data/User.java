@@ -8,7 +8,8 @@ import java.util.List;
 
 public class User {
 
-    private String login, password, phoneNumber, userType;
+    private final String login;
+    private String password, phoneNumber, userType;
     private List<String> favItems;
 
     private List<Order> history;
@@ -30,8 +31,8 @@ public class User {
 
     public User(List<String> args) {
         this.login = args.get(0);
-        this.password = args.get(1);
-        this.phoneNumber = args.get(2);
+        this.phoneNumber = args.get(1);
+        this.password = args.get(2);
         this.favItems = new ArrayList<>();
         Collections.addAll(this.favItems, args.get(3).split(","));
         this.userType = args.get(4);
@@ -68,6 +69,13 @@ public class User {
         return CafeSQLManager.executeUpdate(query);
     }
 
+    private void refreshData() {
+        String query = String.format("SELECT * FROM USERS WHERE login='%s'", this.login);
+        List<String> data = CafeSQLManager.executeQuery(query).get(0);
+
+        this.password = data.get(1);
+    }
+
     public boolean placeOrder() {
         return false;
     }
@@ -86,10 +94,6 @@ public class User {
 
     public String getLogin() {
         return this.login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getPassword() {

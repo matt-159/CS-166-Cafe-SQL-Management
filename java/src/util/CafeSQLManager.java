@@ -50,6 +50,7 @@ public final class CafeSQLManager {
      * @return a list representing the ResultSet of the query
      */
     public static List<List<String>> executeQuery(String query, boolean includeColumnHeaders) {
+        System.out.println(query);
         List<List<String>> results = null;
 
         try {
@@ -72,6 +73,7 @@ public final class CafeSQLManager {
      * @param sql the input SQL string
      */
     public static boolean executeUpdate(String sql) {
+        System.out.println(sql);
         boolean wasSuccess = false;
 
         try {
@@ -129,7 +131,7 @@ public final class CafeSQLManager {
                     }
                     list.add(row);
 
-                    row.clear();
+                    row = new ArrayList<>();
                     includeColumnHeaders = false;
                 }
 
@@ -146,16 +148,8 @@ public final class CafeSQLManager {
     }
 
     public static void printResultSetList(List<List<String>> rsList) {
-        printResultSetList(rsList, false);
-    }
-
-    public static void printResultSetList(List<List<String>> rsList, boolean printColumnHeaders) {
         if (rsList == null) {
             return;
-        }
-
-        if (!printColumnHeaders && rsList.size() > 0) {
-            rsList.remove(0);
         }
 
         int maxLength = rsList.stream()
@@ -177,12 +171,11 @@ public final class CafeSQLManager {
     public static User login(String username, String password) {
 
         String query = String.format("SELECT * FROM USERS WHERE login = '%s' AND password = '%s'", username, password);
-        System.out.println(query);
 
-        List<List<String>> results = executeQuery(query, true);
+        List<List<String>> results = executeQuery(query);
 
         if (results != null) {
-            printResultSetList(results, true);
+            printResultSetList(results);
         }
 
         return (results != null && results.size() > 0) ? new User(results.get(0)) : null;

@@ -50,7 +50,15 @@ public class CafeApplication extends JFrame {
     public void run(User user, AppStates state) {
         switch (state) {
             case CHOOSE_LOGIN_OR_CREATE_USER:
-                currentMenu = new CafeLoginOrCreateUser(this);
+                currentMenu = new CafeLoginOrCreateUser();
+
+                break;
+            case LOGIN:
+                currentMenu = new CafeLogin();
+
+                break;
+            case CREATE_USER:
+                currentMenu = new CafeCreateUser();
 
                 break;
             case USER_HOME:

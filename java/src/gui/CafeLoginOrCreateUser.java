@@ -9,63 +9,28 @@ public class CafeLoginOrCreateUser extends JPanel {
     private final JButton chooseLogin;
     private final JButton chooseCreateNewUser;
 
-    private final CafeLogin loginPanel;
-
-    private final CafeApplication app;
-
-    public CafeLoginOrCreateUser(CafeApplication parent) {
-
-        this.app = parent;
+    public CafeLoginOrCreateUser() {
 
         chooseLogin = new JButton("Log In");
         chooseLogin.setActionCommand("logIn");
-        chooseLogin.setVisible(true);
-
-        chooseLogin.addActionListener(new UserLoginOrCreateUserActionListener(this));
+        chooseLogin.addActionListener(new UserLoginOrCreateUserActionListener());
         this.add(chooseLogin);
 
         chooseCreateNewUser = new JButton("Create Account");
         chooseCreateNewUser.setActionCommand("createAccount");
-        chooseCreateNewUser.setVisible(true);
-
-        chooseCreateNewUser.addActionListener(new UserLoginOrCreateUserActionListener(this));
+        chooseCreateNewUser.addActionListener(new UserLoginOrCreateUserActionListener());
         this.add(chooseCreateNewUser);
-
-        loginPanel = new CafeLogin(this);
-        loginPanel.setVisible(false);
-        this.add(loginPanel);
-    }
-
-    private void openLoginMenu() {
-        chooseLogin.setVisible(false);
-        chooseCreateNewUser.setVisible(false);
-
-        loginPanel.setVisible(true);
-    }
-
-    private void openCreateUserMenu() {
-        chooseLogin.setVisible(false);
-        chooseCreateNewUser.setVisible(false);
-
-
     }
 
     private static class UserLoginOrCreateUserActionListener implements ActionListener {
-
-        CafeLoginOrCreateUser cafeLoginOrCreateUser = null;
-
-        public UserLoginOrCreateUserActionListener(CafeLoginOrCreateUser parent) {
-            this.cafeLoginOrCreateUser = parent;
-        }
-
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
                 case "logIn":
-                    cafeLoginOrCreateUser.openLoginMenu();
+                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.LOGIN);
                     break;
                 case "createAccount":
-                    cafeLoginOrCreateUser.openCreateUserMenu();
+                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.CREATE_USER);
                     break;
                 default:
                     break;

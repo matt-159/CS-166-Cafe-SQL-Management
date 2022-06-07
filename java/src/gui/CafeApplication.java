@@ -23,7 +23,16 @@ public class CafeApplication extends JFrame {
     private CafeLoginOrCreateUser loginScreen;
     private CafeUserHome userHome;
 
-    public CafeApplication() throws HeadlessException {
+    private static CafeApplication instance = null;
+
+    public static CafeApplication getInstance() {
+        if (instance == null) {
+            instance = new CafeApplication();
+        }
+
+        return instance;
+    }
+    private CafeApplication() throws HeadlessException {
         super(TITLE);
 
         this.frameInit();

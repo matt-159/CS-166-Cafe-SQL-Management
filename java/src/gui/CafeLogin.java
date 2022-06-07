@@ -14,11 +14,8 @@ public class CafeLogin extends JPanel {
     private final JButton submitButton;
     private final JLabel usernameLabel, passwordLabel, invalidNotification;
 
-    private final CafeApplication app;
-
-    public CafeLogin(CafeApplication parent) {
+    public CafeLogin() {
         super();
-        this.app = parent;
 
         usernameLabel = new JLabel("Login");
         this.add(usernameLabel);
@@ -62,7 +59,7 @@ public class CafeLogin extends JPanel {
                     User user = CafeSQLManager.login(username, password);
 
                     if (user != null) {
-                        parent.app.run(user, CafeApplication.AppStates.USER_HOME);
+                        CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME);
                     } else {
                         parent.invalidNotification.setVisible(true);
                     }

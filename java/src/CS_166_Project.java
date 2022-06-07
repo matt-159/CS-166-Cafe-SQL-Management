@@ -11,6 +11,7 @@
  */
 
 import gui.CafeApplication;
+import gui.CafeApplication.*;
 import gui.DebugPanel;
 import util.CafeSQLManager;
 
@@ -30,7 +31,8 @@ public class CS_166_Project {
             CafeSQLManager.init(dbhost, dbname, dbport, user, password);
 
             CafeApplication app = new CafeApplication();
-            app.run();
+
+            app.run(null, AppStates.CHOOSE_LOGIN_OR_CREATE_USER);
         });
     }
 }

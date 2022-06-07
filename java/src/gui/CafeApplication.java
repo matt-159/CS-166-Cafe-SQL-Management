@@ -1,5 +1,6 @@
 package gui;
 
+import data.User;
 import util.CafeSQLManager;
 
 import javax.swing.*;
@@ -9,8 +10,21 @@ import java.awt.event.WindowEvent;
 
 public class CafeApplication extends JFrame {
 
+    public enum AppStates {
+        CHOOSE_LOGIN_OR_CREATE_USER,
+        LOGIN,
+        CREATE_USER,
+        USER_HOME
+    }
+
+    private static final String TITLE = "CS 166 Project - Cafe Management";
+
+    private JPanel currentMenu;
+    private CafeLoginOrCreateUser loginScreen;
+    private CafeUserHome userHome;
+
     public CafeApplication() throws HeadlessException {
-        super("CS 166 Project - Cafe Management");
+        super(TITLE);
 
         this.frameInit();
 
@@ -21,19 +35,34 @@ public class CafeApplication extends JFrame {
     @Override
     protected void frameInit() {
         this.setRootPane(createRootPane());
-
-        loginScreen = new CafeLoginOrCreateUser(this);
-        this.add(loginScreen);
-
         this.setVisible(true);
     }
 
-    public void run() {
+    public void run(User user, AppStates state) {
+        switch (state) {
+            case CHOOSE_LOGIN_OR_CREATE_USER:
+                currentMenu = new CafeLoginOrCreateUser(this);
 
+                break;
+            case USER_HOME:
+                if (user == null) throw new NullPointerException("User should not be null here");
+
+                this.setTitle(TITLE + " - " + user.getLogin());
+                currentMenu = new CafeUserHome(user);
+
+                break;
+            default:
+                System.out.println("Congrats! You managed to make it here somehow!");
+                break;
+        }
+
+        this.removeAll();
+        this.add(currentMenu);
+        this.repaint();
+        this.revalidate();
     }
 
-
-    private class CafeApplicationWindowAdapter extends WindowAdapter {
+    private static class CafeApplicationWindowAdapter extends WindowAdapter {
         @Override
         public void windowClosing(WindowEvent e) {
             CafeSQLManager.cleanup();

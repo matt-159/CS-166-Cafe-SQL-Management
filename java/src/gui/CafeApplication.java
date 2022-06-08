@@ -14,14 +14,20 @@ public class CafeApplication extends JFrame {
         CHOOSE_LOGIN_OR_CREATE_USER,
         LOGIN,
         CREATE_USER,
-        USER_HOME
+        USER_HOME,
+        USER_VIEW_MENU,
+        USER_PLACE_ORDER,
+        USER_VIEW_ORDER_STATUS,
+        USER_VIEW_ORDER_HISTORY,
+        USER_VIEW_PROFILE,
+        USER_UPDATE_ITEM_STATUS,
+        USER_UPDATE_MENU,
+        USER_UPDATE_USER
     }
 
     private static final String TITLE = "CS 166 Project - Cafe Management";
 
     private JPanel currentMenu;
-    private CafeLoginOrCreateUser loginScreen;
-    private CafeUserHome userHome;
 
     private static CafeApplication instance = null;
 
@@ -50,6 +56,7 @@ public class CafeApplication extends JFrame {
     public void run(User user, AppStates state) {
         switch (state) {
             case CHOOSE_LOGIN_OR_CREATE_USER:
+                this.setTitle(TITLE);
                 currentMenu = new CafeLoginOrCreateUser();
 
                 break;
@@ -66,6 +73,30 @@ public class CafeApplication extends JFrame {
 
                 this.setTitle(TITLE + " - " + user.getLogin());
                 currentMenu = new CafeUserHome(user);
+
+                break;
+            case USER_VIEW_MENU:
+
+                break;
+            case USER_PLACE_ORDER:
+
+                break;
+            case USER_VIEW_ORDER_STATUS:
+
+                break;
+            case USER_VIEW_ORDER_HISTORY:
+
+                break;
+            case USER_VIEW_PROFILE:
+
+                break;
+            case USER_UPDATE_ITEM_STATUS:
+
+                break;
+            case USER_UPDATE_MENU:
+
+                break;
+            case USER_UPDATE_USER:
 
                 break;
             default:

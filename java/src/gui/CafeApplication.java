@@ -80,24 +80,31 @@ public class CafeApplication extends JFrame {
 
                 break;
             case USER_PLACE_ORDER:
+                currentMenu = new CafePlaceOrder(user);
 
                 break;
             case USER_VIEW_ORDER_STATUS:
+                currentMenu = new CafeViewOrderStatus(user);
 
                 break;
             case USER_VIEW_ORDER_HISTORY:
+                currentMenu = new CafeViewOrderHistory(user);
 
                 break;
             case USER_VIEW_PROFILE:
+                currentMenu = new CafeViewProfile(user);
 
                 break;
             case USER_UPDATE_ITEM_STATUS:
+                currentMenu = new CafeUpdateItemStatus(user);
 
                 break;
             case USER_UPDATE_MENU:
+                currentMenu = new CafeUpdateMenu(user);
 
                 break;
             case USER_UPDATE_USER:
+                currentMenu = new CafeUpdateUser(user);
 
                 break;
             default:

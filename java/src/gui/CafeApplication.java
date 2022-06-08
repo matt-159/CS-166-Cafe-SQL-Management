@@ -76,6 +76,7 @@ public class CafeApplication extends JFrame {
 
                 break;
             case USER_VIEW_MENU:
+                currentMenu = new CafeMenu(user);
 
                 break;
             case USER_PLACE_ORDER:

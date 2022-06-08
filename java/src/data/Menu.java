@@ -2,15 +2,14 @@ package data;
 
 import util.CafeSQLManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Menu {
 
     private static Menu instance = null;
-    private Map<String, MenuItem> menuItems;
+
+    private ArrayList<MenuItem> menuItems;
+    private Set<String> categories;
 
     public static Menu getInstance() {
         if (instance == null) {
@@ -27,28 +26,45 @@ public class Menu {
     }
 
     public Map<String, MenuItem> getMenu() {
-        return this.menuItems;
+        Map<String, MenuItem> menu = new HashMap<>();
+
+        this.menuItems.forEach(menuItem -> menu.put(menuItem.getItemName(), menuItem));
+
+        return menu;
+    }
+
+    public Map<String, List<MenuItem>> getCategorizedMenu() {
+        Map<String, List<MenuItem>> menu = new HashMap<>();
+
+        categories.forEach(category -> menu.put(category, new ArrayList<>()));
+
+        this.menuItems.forEach(menuItem -> menu.get(menuItem.getType()).add(menuItem));
+
+        return menu;
     }
 
     public void updateMenu(List<List<String>> menuItemList) {
-        menuItems = menuItemListToMap(menuItemList);
+        this.categories = new HashSet<>();
+        this.menuItems = menuItemListToMap(menuItemList);
+
+        this.menuItems.forEach(menuItem -> categories.add(menuItem.getType()));
+    }
+
+    private ArrayList<MenuItem> menuItemListToMap(List<List<String>> menuItemList) {
+        ArrayList<MenuItem> menuItems = new ArrayList<>();
+
+        menuItemList.forEach(menuItem -> {
+            menuItems.add(new MenuItem(menuItem));
+        });
+
+        return menuItems;
     }
 
     public boolean updateDB() {
         List<Boolean> status = new ArrayList<>(menuItems.size());
 
-        menuItems.keySet().forEach(key -> status.add(menuItems.get(key).updateDB()));
+        menuItems.forEach(menuItem -> status.add(menuItem.updateDB()));
 
         return status.stream().allMatch(b -> b);
-    }
-
-    private static Map<String, MenuItem> menuItemListToMap(List<List<String>> menuItemList) {
-        Map<String, MenuItem> menuItemMap = new HashMap<>();
-
-        menuItemList.forEach(menuItem -> {
-            menuItemMap.put(menuItem.get(0), new MenuItem(menuItem));
-        });
-
-        return menuItemMap;
     }
 }

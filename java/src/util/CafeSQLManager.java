@@ -1,7 +1,5 @@
 package util;
 
-import data.User;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -127,7 +125,7 @@ public final class CafeSQLManager {
 
                 if (includeColumnHeaders) {
                     for (int i = 1; i <= cols; i++) {
-                        row.add(rsmd.getColumnName(i));
+                        row.add(rsmd.getColumnName(i).trim());
                     }
                     list.add(row);
 
@@ -136,7 +134,7 @@ public final class CafeSQLManager {
                 }
 
                 for (int i = 1; i <= cols; i++) {
-                    row.add(rs.getString(i));
+                    row.add(rs.getString(i).trim());
                 }
                 list.add(row);
             }
@@ -166,24 +164,5 @@ public final class CafeSQLManager {
             });
             System.out.println();
         });
-    }
-
-    public static User login(String username, String password) {
-
-        String query = String.format("SELECT * FROM USERS WHERE login = '%s' AND password = '%s'", username, password);
-
-        List<List<String>> results = executeQuery(query);
-
-        if (results != null) {
-            printResultSetList(results);
-        }
-
-        return (results != null && results.size() > 0) ? new User(results.get(0)) : null;
-    }
-
-    public static boolean createUser(String phone, String login, String password, String favItems, String type) {
-        String query = String.format("INSERT INTO USERS (phoneNum, login, password, favItems, type) VALUES ('%s','%s','%s','%s','%s')", phone, login, password, favItems, type);
-
-        return executeUpdate(query);
     }
 }

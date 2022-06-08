@@ -84,7 +84,7 @@ public class CafeCreateUser extends JPanel {
 
         private final CafeCreateUser parent;
 
-        private CafeCreateUserActionListener(CafeCreateUser parent) {
+        public CafeCreateUserActionListener(CafeCreateUser parent) {
             this.parent = parent;
         }
 

@@ -88,7 +88,7 @@ public class CafeUserHome extends JPanel {
     private static final class CafeUserHomeActionListener implements ActionListener {
         private final User user;
 
-        private CafeUserHomeActionListener(User user) {
+        public CafeUserHomeActionListener(User user) {
             this.user = user;
         }
 

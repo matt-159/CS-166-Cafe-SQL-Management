@@ -30,6 +30,26 @@ public class MenuItem {
         this.imageURL = args.get(4);
     }
 
+    public String getItemName() {
+        return itemName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
     public boolean updateDB() {
         String rawQuery = "UPDATE MENU SET type='%s', price='%.2f', description='%s', imageURL='%s' WHERE itemName='%s'";
         String query = String.format(rawQuery,

@@ -8,8 +8,13 @@ import java.util.List;
 
 public class User {
 
+    public enum UserType {
+        Customer, Employee, Manager
+    }
+
     private final String login;
-    private String password, phoneNumber, userType;
+    private String password, phoneNumber;
+    private UserType userType;
     private List<String> favItems;
 
     private List<Order> history;
@@ -17,25 +22,33 @@ public class User {
     public User(String login,
                 String password,
                 String phoneNumber,
-                String favItems,
-                String type) {
+                List<String> favItems,
+                UserType type) {
         this.login = login;
         this.password = password;
         this.phoneNumber = phoneNumber;
-        this.favItems = new ArrayList<>();
-        Collections.addAll(this.favItems, favItems.split(","));
+        this.favItems = favItems;
         this.userType = type;
 
         history = fetchOrderHistory();
     }
 
-    public User(List<String> args) {
-        this.login = args.get(0);
-        this.phoneNumber = args.get(1);
-        this.password = args.get(2);
+    public User(List<String> data) {
+        this.login = data.get(0);
+        refreshData(data);
+    }
+
+    private void refreshData() {
+        String query = String.format("SELECT * FROM USERS WHERE login='%s'", this.login);
+        refreshData(CafeSQLManager.executeQuery(query).get(0));
+    }
+
+    private void refreshData(List<String> data) {
+        this.phoneNumber = data.get(1);
+        this.password = data.get(2);
         this.favItems = new ArrayList<>();
-        Collections.addAll(this.favItems, args.get(3).split(","));
-        this.userType = args.get(4);
+        Collections.addAll(this.favItems, data.get(3).split(","));
+        this.userType = UserType.valueOf(data.get(4));
 
         history = fetchOrderHistory();
     }
@@ -69,27 +82,8 @@ public class User {
         return CafeSQLManager.executeUpdate(query);
     }
 
-    private void refreshData() {
-        String query = String.format("SELECT * FROM USERS WHERE login='%s'", this.login);
-        List<String> data = CafeSQLManager.executeQuery(query).get(0);
-
-        this.password = data.get(1);
-    }
-
-    public boolean placeOrder() {
-        return false;
-    }
-
-    public boolean updateOrder() {
-        return false;
-    }
-
-    public boolean updateItemStatus() {
-        return false;
-    }
-
-    public boolean updateUser() {
-        return false;
+    public UserType getUserType() {
+        return userType;
     }
 
     public String getLogin() {
@@ -122,5 +116,37 @@ public class User {
 
     public boolean removeFavItem(String itemname) {
         return this.favItems.remove(itemname);
+    }
+
+    public static User login(String username, String password) {
+
+        String query = String.format("SELECT * FROM USERS WHERE login = '%s' AND password = '%s'", username, password);
+
+        List<List<String>> results = CafeSQLManager.executeQuery(query);
+
+        if (results != null) {
+            CafeSQLManager.printResultSetList(results);
+        }
+
+        return (results != null && results.size() > 0) ? new User(results.get(0)) : null;
+    }
+
+    public enum CreateUserResults {
+        SUCCESS, USERNAME_TAKEN, PHONE_NUMBER_TAKEN
+    }
+
+    public static boolean createUser(User user) {
+        return createUser(  user.login,
+                            user.password,
+                            user.phoneNumber,
+                            String.join(",", user.favItems),
+                            user.userType.toString()    );
+    }
+
+    public static boolean createUser(String login, String password, String phone, String favItems, String type) {
+        String rawQuery = "INSERT INTO USERS (phoneNum, login, password, favItems, type) VALUES ('%s','%s','%s','%s','%s')";
+        String query = String.format(rawQuery, phone, login, password, favItems, type);
+
+        return CafeSQLManager.executeUpdate(query);
     }
 }

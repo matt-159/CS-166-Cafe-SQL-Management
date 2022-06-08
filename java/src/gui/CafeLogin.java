@@ -1,7 +1,6 @@
 package gui;
 
 import data.User;
-import util.CafeSQLManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +10,7 @@ import java.awt.event.ActionListener;
 public class CafeLogin extends JPanel {
 
     private final JTextField usernameField, passwordField;
-    private final JButton submitButton;
+    private final JButton submitButton, backButton;
     private final JLabel usernameLabel, passwordLabel, invalidNotification;
 
     public CafeLogin() {
@@ -39,6 +38,11 @@ public class CafeLogin extends JPanel {
         invalidNotification.setForeground(Color.RED);
         invalidNotification.setVisible(false);
         this.add(invalidNotification);
+
+        backButton = new JButton("Back");
+        backButton.setActionCommand("back");
+        backButton.addActionListener(new SubmitButtonActionListener(this));
+        this.add(backButton);
     }
 
     private static class SubmitButtonActionListener implements ActionListener {
@@ -56,7 +60,7 @@ public class CafeLogin extends JPanel {
                     String username = parent.usernameField.getText();
                     String password = parent.passwordField.getText();
 
-                    User user = CafeSQLManager.login(username, password);
+                    User user = User.login(username, password);
 
                     if (user != null) {
                         CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME);
@@ -65,7 +69,9 @@ public class CafeLogin extends JPanel {
                     }
 
                     break;
-
+                case "back":
+                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.CHOOSE_LOGIN_OR_CREATE_USER);
+                    break;
                 default:
                     break;
             }

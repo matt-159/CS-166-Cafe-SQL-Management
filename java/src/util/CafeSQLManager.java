@@ -165,4 +165,10 @@ public final class CafeSQLManager {
             System.out.println();
         });
     }
+
+    public static boolean isEmptyResultSet(List<List<String>> rsList) {
+        return rsList.stream()
+                .flatMap(Collection::stream)
+                .allMatch(str -> str.trim().isEmpty());
+    }
 }

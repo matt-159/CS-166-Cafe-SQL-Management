@@ -16,7 +16,7 @@ public class CafeCreateUser extends JPanel {
 
     private static final int TEXTFIELD_WIDTH = 20;
 
-    private JButton submit;
+    private JButton submit, back;
     private JLabel usernameLabel, passwordLabel1, passwordLabel2, phoneNumLabel, favItemsLabel;
     private JTextField username, password1, password2, phoneNum;
 
@@ -73,6 +73,11 @@ public class CafeCreateUser extends JPanel {
         submit.setActionCommand("submit");
         submit.addActionListener(new CafeCreateUserActionListener(this));
         this.add(submit);
+
+        back = new JButton("Back");
+        back.setActionCommand("back");
+        back.addActionListener(new CafeCreateUserActionListener(this));
+        this.add(back);
     }
 
     private static class CafeCreateUserActionListener implements ActionListener {
@@ -111,7 +116,6 @@ public class CafeCreateUser extends JPanel {
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
                 case "submit":
-
                     boolean missingField =  parent.username.getText().isEmpty()  ||
                                             parent.password1.getText().isEmpty() ||
                                             parent.password2.getText().isEmpty();
@@ -152,6 +156,10 @@ public class CafeCreateUser extends JPanel {
                     }
 
                     break;
+
+                case "back":
+                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.CHOOSE_LOGIN_OR_CREATE_USER);
+
                 default:
                     System.err.println("Congrats! You managed to get here and I have no idea how!");
             }

@@ -36,7 +36,7 @@ public class Order {
         this.orderID = orderID;
 
         getOrderInfo();
-        getItemStatusInfo();
+        items = getItemStatusInfo();
     }
 
     private void getOrderInfo() {

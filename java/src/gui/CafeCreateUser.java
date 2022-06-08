@@ -160,8 +160,11 @@ public class CafeCreateUser extends JPanel {
                 case "back":
                     CafeApplication.getInstance().run(null, CafeApplication.AppStates.CHOOSE_LOGIN_OR_CREATE_USER);
 
+                    break;
                 default:
                     System.err.println("Congrats! You managed to get here and I have no idea how!");
+
+                    break;
             }
         }
     }

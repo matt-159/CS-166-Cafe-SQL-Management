@@ -14,10 +14,10 @@ public class CafeUserHome extends JPanel {
     private final JButton openMenu, openPlaceNewOrder, openOrderStatus, openOrderHistory, openProfile, logout;
 
     //Employee + Manager options
-    private JButton openUpdateItemStatus;
+    private final JButton openUpdateItemStatus;
 
     //Manager only
-    private JButton openUpdateMenu, openUpdateUser;
+    private final JButton openUpdateMenu, openUpdateUser;
 
     public CafeUserHome(User user) {
         super();
@@ -85,7 +85,7 @@ public class CafeUserHome extends JPanel {
         }
     }
 
-    private static final class CafeUserHomeActionListener implements ActionListener {
+    private static class CafeUserHomeActionListener implements ActionListener {
         private final User user;
 
         public CafeUserHomeActionListener(User user) {

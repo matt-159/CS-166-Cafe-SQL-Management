@@ -18,27 +18,30 @@ public class CafeMenu extends JPanel {
     private final User user;
 
     public CafeMenu(User user) {
-        super(new GridLayout(0, 1));
+        super();
 
         this.user = user;
 
         Map<String, List<MenuItem>> menu = Menu.getInstance().getCategorizedMenu();
 
+        this.setLayout(new GridLayout(menu.size() + 1, 1));
+
         menu.keySet().forEach(key -> {
-            JPanel panel = new JPanel();
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            JPanel panel = new JPanel(new GridLayout(2,1));
+
+            JPanel panel1 = new JPanel(new GridLayout(menu.get(key).size(), 1));
+            menu.get(key).forEach(menuItem -> {
+                JPanel panel2 = new JPanel(new GridLayout(1, 3));
+
+                panel2.add(new JLabel(menuItem.getItemName()));
+                panel2.add(new JLabel(String.format("$%.2f", menuItem.getPrice())));
+                panel2.add(new JLabel(menuItem.getDescription()));
+
+                panel1.add(panel2);
+            });
 
             panel.add(new JLabel(key));
-
-            menu.get(key).forEach(menuItem -> {
-                JPanel panel1 = new JPanel();
-                panel1.setLayout(new BoxLayout(panel1, BoxLayout.X_AXIS));
-
-                panel1.add(new JLabel(menuItem.getItemName()));
-                panel1.add(new JLabel(String.format("$%.2f", menuItem.getPrice())));
-                panel1.add(new JLabel(menuItem.getDescription()));
-                panel.add(panel1);
-            });
+            panel.add(panel1);
 
             this.add(panel);
         });

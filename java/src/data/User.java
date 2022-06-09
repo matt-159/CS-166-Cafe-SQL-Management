@@ -119,6 +119,10 @@ public class User {
         return this.favItems.remove(itemname);
     }
 
+    public List<Order> getOrderHistory() {
+        return this.history;
+    }
+
     public static User login(String username, String password) {
 
         String query = String.format("SELECT * FROM USERS WHERE login = '%s' AND password = '%s'", username, password);

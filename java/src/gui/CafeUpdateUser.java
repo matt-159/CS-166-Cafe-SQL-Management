@@ -27,8 +27,13 @@ public class CafeUpdateUser extends JPanel {
     private final List<List<String>> userList;
 
     public CafeUpdateUser(User user) {
-        super();
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        super(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        c.gridx = 0;
+        c.weightx = 1;
+        c.weighty = 1;
 
         this.user = user;
 
@@ -63,12 +68,16 @@ public class CafeUpdateUser extends JPanel {
         jtable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         jtablePane = new JScrollPane(jtable);
-        this.add(jtablePane);
+        c.gridy = 0;
+        c.gridheight = 9;
+        this.add(jtablePane, c);
 
         back = new JButton("Back");
         back.setActionCommand("back");
         back.addActionListener(new CafeUpdateUserActionListener(user));
-        this.add(back);
+        c.gridy = 9;
+        c.gridheight = 1;
+        this.add(back, c);
     }
 
     private List<List<String>> getUserList() {
@@ -149,12 +158,12 @@ public class CafeUpdateUser extends JPanel {
         private void check(MouseEvent e) {
             if (e.isPopupTrigger()) {
                 System.out.printf("Showing popup at (x: %d, y: %d)\n", e.getX(), e.getYOnScreen());
-                Point p = jtablePane.getMousePosition();
-                p.x += jtable.getX();
+                Point p = jtable.getMousePosition();
+//                p.x += jtable.getX();
 
-                jtable.changeSelection(p.y / jtable.getRowHeight(), 0, false, false);
+                jtable.changeSelection(jtable.rowAtPoint(p), 0, false, false);
 
-                popup.show(CafeApplication.getInstance(), p.x, p.y);
+                popup.show(CafeApplication.getInstance(), p.x, jtablePane.getMousePosition().y);
             }
         }
     }

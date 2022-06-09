@@ -3,6 +3,7 @@ package gui;
 import data.User;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,7 +12,7 @@ public class CafeUserHome extends JPanel {
     private final User user;
 
     //Standard User Options
-    private final JButton openMenu, openPlaceNewOrder, openOrderStatus, openOrderHistory, openProfile, logout;
+    private final JButton openMenu, openPlaceNewOrder, openOrderHistory, openProfile, logout;
 
     //Employee + Manager options
     private final JButton openUpdateItemStatus;
@@ -20,8 +21,7 @@ public class CafeUserHome extends JPanel {
     private final JButton openUpdateMenu, openUpdateUser;
 
     public CafeUserHome(User user) {
-        super();
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        super(new GridLayout(0, 1));
 
         this.user = user;
 
@@ -34,11 +34,6 @@ public class CafeUserHome extends JPanel {
         openPlaceNewOrder.setActionCommand("openPlaceNewOrder");
         openPlaceNewOrder.addActionListener(new CafeUserHomeActionListener(user));
         this.add(openPlaceNewOrder);
-
-        openOrderStatus = new JButton("View Order Status");
-        openOrderStatus.setActionCommand("openOrderStatus");
-        openOrderStatus.addActionListener(new CafeUserHomeActionListener(user));
-        this.add(openOrderStatus);
 
         openOrderHistory = new JButton("View Order History");
         openOrderHistory.setActionCommand("openOrderHistory");
@@ -100,9 +95,6 @@ public class CafeUserHome extends JPanel {
                     break;
                 case "openPlaceNewOrder":
                     CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_PLACE_ORDER, null);
-                    break;
-                case "openOrderStatus":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_ORDER_STATUS, null);
                     break;
                 case "openOrderHistory":
                     CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_ORDER_HISTORY, null);

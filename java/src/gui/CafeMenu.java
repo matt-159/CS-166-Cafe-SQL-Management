@@ -5,6 +5,7 @@ import data.MenuItem;
 import data.User;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -17,8 +18,7 @@ public class CafeMenu extends JPanel {
     private final User user;
 
     public CafeMenu(User user) {
-        super();
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        super(new GridLayout(0, 1));
 
         this.user = user;
 

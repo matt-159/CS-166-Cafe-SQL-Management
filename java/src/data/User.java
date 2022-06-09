@@ -62,7 +62,8 @@ public class User {
         "   (SELECT USERS.login, " +
         "           ORDERS.orderid " +
         "   FROM ORDERS " +
-        "   LEFT JOIN USERS ON ORDERS.login=USERS.login) AS ORDERHISTORY WHERE ORDERHISTORY.login='%s')";
+        "   LEFT JOIN USERS ON ORDERS.login=USERS.login) AS ORDERHISTORY WHERE ORDERHISTORY.login='%s') " +
+        "ORDER BY lastUpdated";
         String query = String.format(rawQuery, this.login);
 
         ArrayList<Order> orderHistory = new ArrayList<>();

@@ -30,7 +30,7 @@ public class CS_166_Project {
 
             CafeSQLManager.init(dbhost, dbname, dbport, user, password);
 
-            CafeApplication.getInstance().run(null, AppStates.CHOOSE_LOGIN_OR_CREATE_USER);
+            CafeApplication.getInstance().run(null, AppStates.CHOOSE_LOGIN_OR_CREATE_USER, null);
         });
     }
 }

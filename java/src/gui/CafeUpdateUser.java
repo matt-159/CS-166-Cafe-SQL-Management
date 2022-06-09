@@ -170,7 +170,7 @@ public class CafeUpdateUser extends JPanel {
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
                 case "back":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME);
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME, null);
 
                     break;
                 default:

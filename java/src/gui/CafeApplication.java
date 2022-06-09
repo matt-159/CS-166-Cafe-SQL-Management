@@ -1,5 +1,6 @@
 package gui;
 
+import data.Order;
 import data.User;
 import util.CafeSQLManager;
 
@@ -53,7 +54,7 @@ public class CafeApplication extends JFrame {
         this.setVisible(true);
     }
 
-    public void run(User user, AppStates state) {
+    public void run(User user, AppStates state, Order order) {
         switch (state) {
             case CHOOSE_LOGIN_OR_CREATE_USER:
                 this.setTitle(TITLE);
@@ -84,7 +85,7 @@ public class CafeApplication extends JFrame {
 
                 break;
             case USER_VIEW_ORDER_STATUS:
-                currentMenu = new CafeViewOrderStatus(user);
+                currentMenu = new CafeViewOrderStatus(user, order);
 
                 break;
             case USER_VIEW_ORDER_HISTORY:

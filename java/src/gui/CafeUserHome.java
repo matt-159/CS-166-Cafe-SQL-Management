@@ -96,31 +96,31 @@ public class CafeUserHome extends JPanel {
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
                 case "openMenu":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_MENU);
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_MENU, null);
                     break;
                 case "openPlaceNewOrder":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_PLACE_ORDER);
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_PLACE_ORDER, null);
                     break;
                 case "openOrderStatus":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_ORDER_STATUS);
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_ORDER_STATUS, null);
                     break;
                 case "openOrderHistory":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_ORDER_HISTORY);
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_ORDER_HISTORY, null);
                     break;
                 case "openProfile":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_PROFILE);
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_PROFILE, null);
                     break;
                 case "openUpdateItemStatus":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_UPDATE_ITEM_STATUS);
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_UPDATE_ITEM_STATUS, null);
                     break;
                 case "openUpdateMenu":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_UPDATE_MENU);
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_UPDATE_MENU, null);
                     break;
                 case "openUpdateUser":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_UPDATE_USER);
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_UPDATE_USER, null);
                     break;
                 case "logout":
-                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.CHOOSE_LOGIN_OR_CREATE_USER);
+                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.CHOOSE_LOGIN_OR_CREATE_USER, null);
                     break;
             }
         }

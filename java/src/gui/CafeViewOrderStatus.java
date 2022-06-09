@@ -33,8 +33,8 @@ public class CafeViewOrderStatus extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
-                case "back":
-                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME);
+                case "showDetails":
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME, null);
 
                     break;
                 default:

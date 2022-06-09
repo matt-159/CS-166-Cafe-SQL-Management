@@ -63,14 +63,14 @@ public class CafeLogin extends JPanel {
                     User user = User.login(username, password);
 
                     if (user != null) {
-                        CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME);
+                        CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME, null);
                     } else {
                         parent.invalidNotification.setVisible(true);
                     }
 
                     break;
                 case "back":
-                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.CHOOSE_LOGIN_OR_CREATE_USER);
+                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.CHOOSE_LOGIN_OR_CREATE_USER, null);
                     break;
                 default:
                     break;

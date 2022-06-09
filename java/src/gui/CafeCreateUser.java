@@ -150,7 +150,7 @@ public class CafeCreateUser extends JPanel {
                                             User.UserType.Customer  );
 
                     if (User.createUser(user)) {
-                        CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME);
+                        CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME, null);
                     } else {
                         System.err.println("Something went wrong during account creation");
                     }
@@ -158,7 +158,7 @@ public class CafeCreateUser extends JPanel {
                     break;
 
                 case "back":
-                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.CHOOSE_LOGIN_OR_CREATE_USER);
+                    CafeApplication.getInstance().run(null, CafeApplication.AppStates.CHOOSE_LOGIN_OR_CREATE_USER, null);
 
                     break;
                 default:

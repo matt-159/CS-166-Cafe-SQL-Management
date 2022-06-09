@@ -61,7 +61,7 @@ public class CafeMenu extends JPanel {
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
                 case "back":
-                    CafeApplication.getInstance().run(this.user, CafeApplication.AppStates.USER_HOME);
+                    CafeApplication.getInstance().run(this.user, CafeApplication.AppStates.USER_HOME, null);
                     break;
                 default:
                     break;

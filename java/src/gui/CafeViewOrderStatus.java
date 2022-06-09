@@ -33,6 +33,7 @@ public class CafeViewOrderStatus extends JPanel {
         this.items = order.getItems();
 
         table = new JTable(new ItemStatusTable());
+        table.getTableHeader().setReorderingAllowed(false);
         JScrollPane tablePane = new JScrollPane(table);
         c.gridy = 0;
         c.gridheight = 9;

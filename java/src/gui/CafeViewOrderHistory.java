@@ -30,6 +30,7 @@ public class CafeViewOrderHistory extends JPanel {
         this.user = user;
 
         table = new JTable(new OrderHistoryTable(user.getOrderHistory()));
+        table.getTableHeader().setReorderingAllowed(false);
         table.getColumn(" ").setCellRenderer(new ButtonRenderer("Show Details"));
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.addMouseListener(new TableMouseListener());

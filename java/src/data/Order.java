@@ -9,11 +9,11 @@ public class Order {
 
     private final User user;
     private final int orderID;
-    private boolean isPaid;
+    private Boolean isPaid;
     private String timestampReceived;
     private double total;
 
-    private List<ItemStatus> items;
+    private final List<ItemStatus> items;
 
     public Order(User user,
                  int orderId,
@@ -26,8 +26,7 @@ public class Order {
         this.timestampReceived = timestampReceived;
         this.total = total;
 
-        this.items = new ArrayList<>();
-        getItemStatusInfo();
+        this.items = getItemStatusInfo();
     }
 
     public Order(User user,
@@ -75,6 +74,26 @@ public class Order {
         return itemInfo;
     }
 
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public Boolean getIsPaid() {
+        return isPaid;
+    }
+
+    public String getTimestampReceived() {
+        return timestampReceived;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public List<ItemStatus> getItems() {
+        return items;
+    }
+
     public boolean updateDB() {
         String query = String.format("UPDATE ORDERS SET login='%s', paid='%s', timestampRecieved='%s', total='%.2f' WHERE orderid='%d'",
             this.user.getLogin(),
@@ -84,5 +103,13 @@ public class Order {
             this.orderID);
 
         return CafeSQLManager.executeUpdate(query);
+    }
+
+    public String toString() {
+        return String.format("%10s%10s%40s%15.2f",
+                this.orderID,
+                this.isPaid,
+                this.timestampReceived,
+                this.total);
     }
 }

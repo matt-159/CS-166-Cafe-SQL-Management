@@ -16,7 +16,6 @@ public class CafeUpdateUser extends JPanel {
 
     private final JButton back;
 
-    private final TableModel table;
     private final JTable jtable;
     private final JScrollPane jtablePane;
 
@@ -39,42 +38,23 @@ public class CafeUpdateUser extends JPanel {
 
         userList = getUserList();
 
-        this.table = new AbstractTableModel() {
-            @Override
-            public int getRowCount() {
-                return userList.size();
-            }
+        this.tableMouseListener = new TableMouseListener();
+        this.popup = new TablePopUp();
 
-            @Override
-            public int getColumnCount() {
-                return 1;
-            }
+        this.jtable = new JTable(new UserTable());
+        this.jtable.addMouseListener(tableMouseListener);
+        this.jtable.getTableHeader().setReorderingAllowed(false);
+        this.jtable.setFont(new Font("Consolas", Font.PLAIN, 12));
+        this.jtable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-            @Override
-            public Object getValueAt(int rowIndex, int columnIndex) {
-                return String.format("%-50s%-10s",
-                        userList.get(rowIndex).get(0).replaceAll("\\.", " ").replaceAll("_", " "),
-                        userList.get(rowIndex).get(1));
-            }
-        };
-
-        tableMouseListener = new TableMouseListener();
-        popup = new TablePopUp();
-
-        jtable = new JTable(table);
-        jtable.setTableHeader(null);
-        jtable.addMouseListener(tableMouseListener);
-        jtable.setFont(new Font("Consolas", Font.PLAIN, 12));
-        jtable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        jtablePane = new JScrollPane(jtable);
+        this.jtablePane = new JScrollPane(jtable);
         c.gridy = 0;
         c.gridheight = 9;
         this.add(jtablePane, c);
 
-        back = new JButton("Back");
-        back.setActionCommand("back");
-        back.addActionListener(new CafeUpdateUserActionListener(user));
+        this.back = new JButton("Back");
+        this.back.setActionCommand("back");
+        this.back.addActionListener(new CafeUpdateUserActionListener(user));
         c.gridy = 9;
         c.gridheight = 1;
         this.add(back, c);
@@ -84,6 +64,35 @@ public class CafeUpdateUser extends JPanel {
         String query = String.format("SELECT login, type FROM USERS WHERE login!='%s' ORDER BY login", user.getLogin());
 
         return CafeSQLManager.executeQuery(query);
+    }
+
+    private class UserTable extends AbstractTableModel {
+        private final String[] COLUMN_NAMES = { "Login", "User Type" };
+
+        @Override
+        public int getRowCount() {
+            return userList.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 2;
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return COLUMN_NAMES[column];
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            return String.class;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            return userList.get(rowIndex).get(columnIndex);
+        }
     }
 
     private class TablePopUp extends JPopupMenu {

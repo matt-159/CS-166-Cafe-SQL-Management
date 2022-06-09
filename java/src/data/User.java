@@ -2,9 +2,7 @@ package data;
 
 import util.CafeSQLManager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class User {
 
@@ -53,7 +51,7 @@ public class User {
         history = fetchOrderHistory();
     }
 
-    private ArrayList<Order> fetchOrderHistory() {
+    private List<Order> fetchOrderHistory() {
         String rawQuery =
         "SELECT * " +
         "FROM ITEMSTATUS WHERE ITEMSTATUS.orderid IN ( " +
@@ -66,8 +64,11 @@ public class User {
         "ORDER BY lastUpdated";
         String query = String.format(rawQuery, this.login);
 
-        ArrayList<Order> orderHistory = new ArrayList<>();
-        CafeSQLManager.executeQuery(query).forEach(orderData -> orderHistory.add(new Order(this, Integer.parseInt(orderData.get(0)))));
+        Set<Integer> orderIDSet = new HashSet<>();
+        CafeSQLManager.executeQuery(query).forEach(orderData -> orderIDSet.add(Integer.parseInt(orderData.get(0))));
+
+        List<Order> orderHistory = new ArrayList<>();
+        orderIDSet.forEach(orderID -> orderHistory.add(new Order(this, orderID)));
 
         return orderHistory;
     }

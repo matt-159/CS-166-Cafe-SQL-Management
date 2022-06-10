@@ -75,6 +75,7 @@ public class CafePlaceOrder extends JPanel {
                                         ""));
                             });
 
+                    user.refreshData();
                     break;
                 case "back":
                     CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_HOME, null);

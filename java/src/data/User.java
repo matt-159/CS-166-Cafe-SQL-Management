@@ -36,7 +36,7 @@ public class User {
         refreshData(data);
     }
 
-    private void refreshData() {
+    public void refreshData() {
         String query = String.format("SELECT * FROM USERS WHERE login='%s'", this.login);
         refreshData(CafeSQLManager.executeQuery(query).get(0));
     }

@@ -52,6 +52,18 @@ public class ItemStatus {
         return comments;
     }
 
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
     public boolean updateDB() {
         String query = String.format("UPDATE ITEMSTATUS SET lastUpdated='%s', status='%s', comments='%s' WHERE (itemName='%s' and orderId='%s')",
                 this.lastUpdated,

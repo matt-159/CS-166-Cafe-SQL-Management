@@ -67,4 +67,17 @@ public class Menu {
 
         return status.stream().allMatch(b -> b);
     }
+
+    public static boolean addNewMenuItem(String itemName,
+                                         String type,
+                                         double price,
+                                         String description,
+                                         String imageURL) {
+        String rawQuery =
+        "INSERT INTO MENU (itemName, type, price, description, imageURL) " +
+        "VALUES ('%s', '%s', %.2f, '%s', '%s')";
+        String query = String.format(rawQuery, itemName, type, price, description, imageURL);
+
+        return CafeSQLManager.executeUpdate(query);
+    }
 }

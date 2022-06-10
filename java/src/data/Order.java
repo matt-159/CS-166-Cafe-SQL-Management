@@ -2,6 +2,9 @@ package data;
 
 import util.CafeSQLManager;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,5 +114,22 @@ public class Order {
                 this.isPaid,
                 this.timestampReceived,
                 this.total);
+    }
+
+    public static int placeNewOrder(String login, double total) {
+        List<String> info = CafeSQLManager.executeQuery("SELECT COUNT(orderid) + 1 FROM ORDERS").get(0);
+        int orderid = Integer.parseInt(info.get(0));
+
+        String rawQuery = "INSERT INTO ORDERS (orderid, login, paid, timestampRecieved, total) VALUES (%d, '%s', '%s', '%s', %.2f)";
+        String query = String.format(rawQuery,
+                orderid,
+                login,
+                "f",
+                Timestamp.from(Instant.now().truncatedTo(ChronoUnit.SECONDS)),
+                total);
+
+        CafeSQLManager.executeUpdate(query);
+
+        return orderid;
     }
 }

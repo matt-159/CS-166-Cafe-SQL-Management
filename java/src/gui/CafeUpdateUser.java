@@ -5,7 +5,6 @@ import util.CafeSQLManager;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
@@ -16,12 +15,10 @@ public class CafeUpdateUser extends JPanel {
 
     private final JButton back;
 
-    private final JTable jtable;
-    private final JScrollPane jtablePane;
+    private final JTable table;
+    private final JScrollPane tablePane;
 
     private final TablePopUp popup;
-
-    private final TableMouseListener tableMouseListener;
 
     private final List<List<String>> userList;
 
@@ -38,19 +35,18 @@ public class CafeUpdateUser extends JPanel {
 
         userList = getUserList();
 
-        this.tableMouseListener = new TableMouseListener();
         this.popup = new TablePopUp();
 
-        this.jtable = new JTable(new UserTable());
-        this.jtable.addMouseListener(tableMouseListener);
-        this.jtable.getTableHeader().setReorderingAllowed(false);
-        this.jtable.setFont(new Font("Consolas", Font.PLAIN, 12));
-        this.jtable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.table = new JTable(new UserTable());
+        this.table.addMouseListener(new TableMouseListener());
+        this.table.getTableHeader().setReorderingAllowed(false);
+        this.table.setFont(new Font("Consolas", Font.PLAIN, 12));
+        this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        this.jtablePane = new JScrollPane(jtable);
+        this.tablePane = new JScrollPane(table);
         c.gridy = 0;
         c.gridheight = 9;
-        this.add(jtablePane, c);
+        this.add(tablePane, c);
 
         this.back = new JButton("Back");
         this.back.setActionCommand("back");
@@ -125,7 +121,7 @@ public class CafeUpdateUser extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                int index = jtable.getSelectedRow();
+                int index = table.getSelectedRow();
                 String login = userList.get(index).get(0);
                 String type = userList.get(index).get(1);
 
@@ -147,8 +143,8 @@ public class CafeUpdateUser extends JPanel {
                 CafeSQLManager.executeUpdate(query);
 
                 userList.get(index).set(1, type);
-                jtable.invalidate();
-                jtable.repaint();
+                table.invalidate();
+                table.repaint();
             }
         }
     }
@@ -167,12 +163,12 @@ public class CafeUpdateUser extends JPanel {
         private void check(MouseEvent e) {
             if (e.isPopupTrigger()) {
                 System.out.printf("Showing popup at (x: %d, y: %d)\n", e.getX(), e.getYOnScreen());
-                Point p = jtable.getMousePosition();
+                Point p = table.getMousePosition();
 //                p.x += jtable.getX();
 
-                jtable.changeSelection(jtable.rowAtPoint(p), 0, false, false);
+                table.changeSelection(table.rowAtPoint(p), 0, false, false);
 
-                popup.show(CafeApplication.getInstance(), p.x, jtablePane.getMousePosition().y);
+                popup.show(CafeApplication.getInstance(), p.x, tablePane.getMousePosition().y);
             }
         }
     }

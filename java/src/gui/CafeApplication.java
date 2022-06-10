@@ -55,7 +55,7 @@ public class CafeApplication extends JFrame {
         this.setVisible(true);
     }
 
-    public void run(User user, AppStates state, Order order) {
+    public void run(User user, AppStates state, Object optional) {
         switch (state) {
             case CHOOSE_LOGIN_OR_CREATE_USER:
                 this.setTitle(TITLE);
@@ -86,7 +86,7 @@ public class CafeApplication extends JFrame {
 
                 break;
             case USER_VIEW_ORDER_STATUS:
-                currentMenu = new CafeViewOrderStatus(user, order);
+                currentMenu = new CafeViewOrderStatus(user, (Order) optional);
 
                 break;
             case USER_VIEW_ORDER_HISTORY:

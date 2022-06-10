@@ -78,6 +78,8 @@ public class Menu {
         "VALUES ('%s', '%s', %.2f, '%s', '%s')";
         String query = String.format(rawQuery, itemName, type, price, description, imageURL);
 
+        instance.menuItems.add(new MenuItem(itemName, type, price, description, imageURL));
+
         return CafeSQLManager.executeUpdate(query);
     }
 }

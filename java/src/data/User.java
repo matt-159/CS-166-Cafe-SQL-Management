@@ -73,17 +73,6 @@ public class User {
         return orderHistory;
     }
 
-    public boolean updateDB() {
-        String query = String.format("UPDATE USERS SET password='%s', phonenum='%s', favitems='%s', type='%s' WHERE login='%s'",
-                this.password,
-                this.phoneNumber,
-                String.join(",", this.favItems),
-                this.userType.toString(),
-                this.login);
-
-        return CafeSQLManager.executeUpdate(query);
-    }
-
     public UserType getUserType() {
         return userType;
     }
@@ -101,7 +90,7 @@ public class User {
     }
 
     public String getPhoneNumber() {
-        return this.getPhoneNumber();
+        return this.phoneNumber;
     }
 
     public void setPhoneNumber(String phoneNumber) {
@@ -109,15 +98,11 @@ public class User {
     }
 
     public List<String> getFavItems() {
-        return this.getFavItems();
+        return this.favItems;
     }
 
-    public boolean addFavItem(String itemname) {
-        return this.favItems.add(itemname);
-    }
-
-    public boolean removeFavItem(String itemname) {
-        return this.favItems.remove(itemname);
+    public void setFavItems(List<String> favItems) {
+        this.favItems = favItems;
     }
 
     public List<Order> getOrderHistory() {
@@ -152,6 +137,17 @@ public class User {
     public static boolean createUser(String login, String password, String phone, String favItems, String type) {
         String rawQuery = "INSERT INTO USERS (phoneNum, login, password, favItems, type) VALUES ('%s','%s','%s','%s','%s')";
         String query = String.format(rawQuery, phone, login, password, favItems, type);
+
+        return CafeSQLManager.executeUpdate(query);
+    }
+
+    public boolean updateDB() {
+        String query = String.format("UPDATE USERS SET password='%s', phonenum='%s', favitems='%s', type='%s' WHERE login='%s'",
+                this.password,
+                this.phoneNumber,
+                String.join(",", this.favItems),
+                this.userType.toString(),
+                this.login);
 
         return CafeSQLManager.executeUpdate(query);
     }

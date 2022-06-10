@@ -18,32 +18,26 @@ public class CafeMenu extends JPanel {
     private final User user;
 
     public CafeMenu(User user) {
-        super();
+        super(new GridLayout(0, 1));
 
         this.user = user;
 
         Map<String, List<MenuItem>> menu = Menu.getInstance().getCategorizedMenu();
 
-        this.setLayout(new GridLayout(menu.size() + 1, 1));
-
         menu.keySet().forEach(key -> {
-            JPanel panel = new JPanel(new GridLayout(2,1));
+            JLabel category = new JLabel(key);
+            category.setFont(category.getFont().deriveFont(Font.BOLD, 16));
+            this.add(category);
 
-            JPanel panel1 = new JPanel(new GridLayout(menu.get(key).size(), 1));
             menu.get(key).forEach(menuItem -> {
-                JPanel panel2 = new JPanel(new GridLayout(1, 3));
+                JPanel panel = new JPanel(new GridLayout(0, 3));
 
-                panel2.add(new JLabel(menuItem.getItemName()));
-                panel2.add(new JLabel(String.format("$%.2f", menuItem.getPrice())));
-                panel2.add(new JLabel(menuItem.getDescription()));
+                panel.add(new JLabel(menuItem.getItemName()));
+                panel.add(new JLabel(String.format("$%.2f", menuItem.getPrice())));
+                panel.add(new JLabel(menuItem.getDescription()));
 
-                panel1.add(panel2);
+                this.add(panel);
             });
-
-            panel.add(new JLabel(key));
-            panel.add(panel1);
-
-            this.add(panel);
         });
 
         back = new JButton("Back");

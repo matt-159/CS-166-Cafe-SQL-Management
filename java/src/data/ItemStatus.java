@@ -65,12 +65,26 @@ public class ItemStatus {
     }
 
     public boolean updateDB() {
-        String query = String.format("UPDATE ITEMSTATUS SET lastUpdated='%s', status='%s', comments='%s' WHERE (itemName='%s' and orderId='%s')",
+        String query = String.format("UPDATE ITEMSTATUS SET lastUpdated='%s', status=E'%s', comments='%s' WHERE (itemName='%s' and orderId=%d)",
                 this.lastUpdated,
                 this.status,
                 this.comments,
                 this.itemName,
                 this.orderID);
+
+        return CafeSQLManager.executeUpdate(query);
+    }
+
+    public static boolean addNewItemStatus(ItemStatus itemStatus) {
+        String rawQuery =
+        "INSERT INTO ITEMSTATUS (orderid, itemName, lastUpdated, status, comments) " +
+        "VALUES (%d, '%s', '%s', '%s', '%s')";
+        String query = String.format(rawQuery,
+                itemStatus.orderID,
+                itemStatus.itemName,
+                itemStatus.lastUpdated,
+                itemStatus.status,
+                itemStatus.comments);
 
         return CafeSQLManager.executeUpdate(query);
     }

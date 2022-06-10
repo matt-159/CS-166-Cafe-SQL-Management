@@ -12,14 +12,14 @@ public class MenuItem {
 
     public MenuItem(String itemName,
                     String type,
+                    double price,
                     String description,
-                    String imageURL,
-                    double price) {
+                    String imageURL) {
         this.itemName = itemName;
         this.type = type;
+        this.price = price;
         this.description = description;
         this.imageURL = imageURL;
-        this.price = price;
     }
 
     public MenuItem(List<String> args) {

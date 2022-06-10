@@ -1,8 +1,8 @@
 package gui;
 
-import data.*;
 import data.Menu;
 import data.MenuItem;
+import data.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,9 +11,7 @@ import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public class CafePlaceOrder extends JPanel {

@@ -62,7 +62,7 @@ public class CafeUpdateItemStatus extends JPanel {
     }
 
     private List<ItemStatus> getItemStatusList() {
-        String query = "SELECT * FROM ITEMSTATUS ORDER BY lastupdated";
+        String query = "SELECT * FROM ITEMSTATUS ORDER BY lastupdated DESC";
 
         List<ItemStatus> list = new ArrayList<>();
         CafeSQLManager.executeQuery(query).forEach(data -> list.add(new ItemStatus(data)));
@@ -164,7 +164,7 @@ public class CafeUpdateItemStatus extends JPanel {
 
                 switch (e.getActionCommand()) {
                     case "setHasntStarted":
-                        status = "Hasn't started";
+                        status = "Hasn''t started";
                         break;
                     case "setStarted":
                         status = "Started";
@@ -177,7 +177,7 @@ public class CafeUpdateItemStatus extends JPanel {
                 }
 
                 item.setStatus(status);
-                item.setStatus(Timestamp.from(Instant.now().truncatedTo(ChronoUnit.SECONDS)).toString());
+                item.setLastUpdated(Timestamp.from(Instant.now().truncatedTo(ChronoUnit.SECONDS)).toString());
                 item.updateDB();
 
                 table.invalidate();

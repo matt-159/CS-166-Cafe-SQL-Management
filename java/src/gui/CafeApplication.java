@@ -24,6 +24,7 @@ public class CafeApplication extends JFrame {
         USER_UPDATE_ITEM_STATUS,
         USER_UPDATE_MENU,
         USER_ADD_MENU_ITEM,
+        USER_EDIT_MENU_ITEM,
         USER_UPDATE_USER
     }
 
@@ -107,6 +108,10 @@ public class CafeApplication extends JFrame {
                 break;
             case USER_ADD_MENU_ITEM:
                 currentMenu = new CafeAddMenuItem(user);
+
+                break;
+            case USER_EDIT_MENU_ITEM:
+                currentMenu = new CafeEditMenuItem(user, (data.MenuItem) optional);
 
                 break;
             case USER_UPDATE_USER:

@@ -116,8 +116,6 @@ public class CafeAddMenuItem extends JPanel {
                                     Double.parseDouble(price.getText().trim()),
                                     description.getText().trim(),
                                     imageURL.getText().trim());
-
-                    break;
                 case "back":
                     CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_UPDATE_MENU, null);
 

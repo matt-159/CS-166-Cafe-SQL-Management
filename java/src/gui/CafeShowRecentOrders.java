@@ -1,9 +1,7 @@
 package gui;
 
-import data.ItemStatus;
 import data.Order;
 import data.User;
-import util.CafeSQLManager;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -12,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CafeShowRecentOrders extends JPanel {

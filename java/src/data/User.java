@@ -3,6 +3,7 @@ package data;
 import util.CafeSQLManager;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class User {
 
@@ -71,6 +72,13 @@ public class User {
         orderIDSet.forEach(orderID -> orderHistory.add(new Order(this, orderID)));
 
         return orderHistory;
+    }
+
+    public List<Order> fetchRecentOrders() {
+        return fetchOrderHistory()
+                .stream()
+                .limit(5)
+                .collect(Collectors.toList());
     }
 
     public UserType getUserType() {

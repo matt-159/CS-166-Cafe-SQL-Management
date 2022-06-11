@@ -20,6 +20,7 @@ public class CafeApplication extends JFrame {
         USER_PLACE_ORDER,
         USER_VIEW_ORDER_STATUS,
         USER_VIEW_ORDER_HISTORY,
+        USER_VIEW_RECENT_ORDERS,
         USER_VIEW_PROFILE,
         USER_UPDATE_ITEM_STATUS,
         USER_UPDATE_MENU,
@@ -92,6 +93,10 @@ public class CafeApplication extends JFrame {
                 break;
             case USER_VIEW_ORDER_HISTORY:
                 currentMenu = new CafeViewOrderHistory(user);
+
+                break;
+            case USER_VIEW_RECENT_ORDERS:
+                currentMenu = new CafeShowRecentOrders(user);
 
                 break;
             case USER_VIEW_PROFILE:

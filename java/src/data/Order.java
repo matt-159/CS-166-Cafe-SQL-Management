@@ -37,8 +37,12 @@ public class Order {
         this.user = user;
         this.orderID = orderID;
 
-        getOrderInfo();
-        items = getItemStatusInfo();
+        if (this.user != null) {
+            getOrderInfo();
+            items = getItemStatusInfo();
+        } else {
+            items = null;
+        }
     }
 
     private void getOrderInfo() {
@@ -97,6 +101,10 @@ public class Order {
         return items;
     }
 
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
+    }
+
     public boolean updateDB() {
         String query = String.format("UPDATE ORDERS SET login='%s', paid='%s', timestampRecieved='%s', total='%.2f' WHERE orderid='%d'",
             this.user.getLogin(),
@@ -131,5 +139,14 @@ public class Order {
         CafeSQLManager.executeUpdate(query);
 
         return orderid;
+    }
+
+    public static List<Order> getRecentOrders() {
+        String query = "SELECT * FROM ORDERS WHERE timestampRecieved >= CURRENT_DATE - 1";
+
+        List<Order> orders = new ArrayList<>();
+        CafeSQLManager.executeQuery(query).forEach(data -> orders.add(new Order(null, Integer.parseInt(data.get(0)))));
+
+        return orders;
     }
 }

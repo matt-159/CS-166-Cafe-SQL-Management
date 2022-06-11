@@ -15,7 +15,7 @@ public class CafeUserHome extends JPanel {
     private final JButton openMenu, openPlaceNewOrder, openOrderHistory, openProfile, logout;
 
     //Employee + Manager options
-    private final JButton openUpdateItemStatus;
+    private final JButton openUpdateItemStatus, openRecentOrders;
 
     //Manager only
     private final JButton openUpdateMenu, openUpdateUser;
@@ -27,42 +27,47 @@ public class CafeUserHome extends JPanel {
 
         openMenu = new JButton("View Menu");
         openMenu.setActionCommand("openMenu");
-        openMenu.addActionListener(new CafeUserHomeActionListener(user));
+        openMenu.addActionListener(new CafeUserHomeActionListener());
         this.add(openMenu);
 
         openPlaceNewOrder = new JButton("Place New Order");
         openPlaceNewOrder.setActionCommand("openPlaceNewOrder");
-        openPlaceNewOrder.addActionListener(new CafeUserHomeActionListener(user));
+        openPlaceNewOrder.addActionListener(new CafeUserHomeActionListener());
         this.add(openPlaceNewOrder);
 
         openOrderHistory = new JButton("View Order History");
         openOrderHistory.setActionCommand("openOrderHistory");
-        openOrderHistory.addActionListener(new CafeUserHomeActionListener(user));
+        openOrderHistory.addActionListener(new CafeUserHomeActionListener());
         this.add(openOrderHistory);
 
         openProfile = new JButton("View Profile");
         openProfile.setActionCommand("openProfile");
-        openProfile.addActionListener(new CafeUserHomeActionListener(user));
+        openProfile.addActionListener(new CafeUserHomeActionListener());
         this.add(openProfile);
+
+        openRecentOrders = new JButton("Open Recent Orders");
+        openRecentOrders.setActionCommand("openRecentOrders");
+        openRecentOrders.addActionListener(new CafeUserHomeActionListener());
+        this.add(openRecentOrders);
 
         openUpdateItemStatus = new JButton("Update Item Status");
         openUpdateItemStatus.setActionCommand("openUpdateItemStatus");
-        openUpdateItemStatus.addActionListener(new CafeUserHomeActionListener(user));
+        openUpdateItemStatus.addActionListener(new CafeUserHomeActionListener());
         this.add(openUpdateItemStatus);
 
         openUpdateMenu = new JButton("Update Menu");
         openUpdateMenu.setActionCommand("openUpdateMenu");
-        openUpdateMenu.addActionListener(new CafeUserHomeActionListener(user));
+        openUpdateMenu.addActionListener(new CafeUserHomeActionListener());
         this.add(openUpdateMenu);
 
         openUpdateUser = new JButton("Change User Type");
         openUpdateUser.setActionCommand("openUpdateUser");
-        openUpdateUser.addActionListener(new CafeUserHomeActionListener(user));
+        openUpdateUser.addActionListener(new CafeUserHomeActionListener());
         this.add(openUpdateUser);
 
         logout = new JButton("Log Out");
         logout.setActionCommand("logout");
-        logout.addActionListener(new CafeUserHomeActionListener(user));
+        logout.addActionListener(new CafeUserHomeActionListener());
         this.add(logout);
 
         this.hideOptions();
@@ -71,6 +76,7 @@ public class CafeUserHome extends JPanel {
     private void hideOptions() {
         switch (this.user.getUserType()) {
             case Customer:
+                this.openRecentOrders.setVisible(false);
                 this.openUpdateItemStatus.setVisible(false);
             case Employee:
                 this.openUpdateUser.setVisible(false);
@@ -80,12 +86,7 @@ public class CafeUserHome extends JPanel {
         }
     }
 
-    private static class CafeUserHomeActionListener implements ActionListener {
-        private final User user;
-
-        public CafeUserHomeActionListener(User user) {
-            this.user = user;
-        }
+    private class CafeUserHomeActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -101,6 +102,9 @@ public class CafeUserHome extends JPanel {
                     break;
                 case "openProfile":
                     CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_PROFILE, null);
+                    break;
+                case "openRecentOrders":
+                    CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_VIEW_RECENT_ORDERS, null);
                     break;
                 case "openUpdateItemStatus":
                     CafeApplication.getInstance().run(user, CafeApplication.AppStates.USER_UPDATE_ITEM_STATUS, null);

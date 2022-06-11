@@ -4,6 +4,9 @@ import util.CafeSQLManager;
 
 import java.util.List;
 
+import static util.Queries.ITEM_STATUS_ADD_NEW_ITEM_STATUS_QUERY;
+import static util.Queries.ITEM_STATUS_UPDATE_DB_QUERY;
+
 public class ItemStatus {
 
     private final int orderID;
@@ -65,7 +68,7 @@ public class ItemStatus {
     }
 
     public boolean updateDB() {
-        String query = String.format("UPDATE ITEMSTATUS SET lastUpdated='%s', status=E'%s', comments='%s' WHERE (itemName='%s' and orderId=%d)",
+        String query = String.format(ITEM_STATUS_UPDATE_DB_QUERY,
                 this.lastUpdated,
                 this.status,
                 this.comments,
@@ -76,10 +79,7 @@ public class ItemStatus {
     }
 
     public static boolean addNewItemStatus(ItemStatus itemStatus) {
-        String rawQuery =
-        "INSERT INTO ITEMSTATUS (orderid, itemName, lastUpdated, status, comments) " +
-        "VALUES (%d, '%s', '%s', '%s', '%s')";
-        String query = String.format(rawQuery,
+        String query = String.format(ITEM_STATUS_ADD_NEW_ITEM_STATUS_QUERY,
                 itemStatus.orderID,
                 itemStatus.itemName,
                 itemStatus.lastUpdated,

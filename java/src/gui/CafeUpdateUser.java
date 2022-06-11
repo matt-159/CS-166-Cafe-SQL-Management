@@ -2,6 +2,7 @@ package gui;
 
 import data.User;
 import util.CafeSQLManager;
+import util.Queries;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -60,7 +61,8 @@ public class CafeUpdateUser extends JPanel {
     }
 
     private List<List<String>> getUserList() {
-        String query = String.format("SELECT login, type FROM USERS WHERE login!='%s' ORDER BY login", user.getLogin());
+        String query = String.format(Queries.CAFE_UPDATE_USER_GET_USER_LIST_QUERY,
+                user.getLogin());
 
         return CafeSQLManager.executeQuery(query);
     }
@@ -142,7 +144,9 @@ public class CafeUpdateUser extends JPanel {
                         break;
                 }
 
-                String query = String.format("UPDATE USERS SET type='%s' WHERE login='%s'", type, login);
+                String query = String.format(Queries.CAFE_UPDATE_USER_UPDATE_USER_QUERY,
+                        type,
+                        login);
                 CafeSQLManager.executeUpdate(query);
 
                 userList.get(index).set(1, type);
@@ -167,7 +171,6 @@ public class CafeUpdateUser extends JPanel {
             if (e.isPopupTrigger()) {
                 System.out.printf("Showing popup at (x: %d, y: %d)\n", e.getX(), e.getYOnScreen());
                 Point p = table.getMousePosition();
-//                p.x += jtable.getX();
 
                 table.changeSelection(table.rowAtPoint(p), 0, false, false);
 

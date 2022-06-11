@@ -4,6 +4,7 @@ import data.Menu;
 import data.MenuItem;
 import data.User;
 import util.CafeSQLManager;
+import util.Queries;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -154,8 +155,8 @@ public class CafeUpdateMenu extends JPanel {
 
                         break;
                     case "delete":
-                        String rawQuery = "DELETE FROM MENU WHERE itemName='%s'";
-                        String query = String.format(rawQuery, item.getItemName());
+                        String query = String.format(Queries.CAFE_UPDATE_MENU_DELETE_MENUITEM_QUERY,
+                                item.getItemName());
                         CafeSQLManager.executeUpdate(query);
 
                         break;

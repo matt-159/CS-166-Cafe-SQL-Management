@@ -1,6 +1,7 @@
 package data;
 
 import util.CafeSQLManager;
+import util.Queries;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -38,7 +39,9 @@ public class User {
     }
 
     public void refreshData() {
-        String query = String.format("SELECT * FROM USERS WHERE login='%s'", this.login);
+        String query = String.format(Queries.USER_REFRESH_DATA_QUERY,
+                this.login);
+
         refreshData(CafeSQLManager.executeQuery(query).get(0));
     }
 
@@ -53,20 +56,12 @@ public class User {
     }
 
     private List<Order> fetchOrderHistory() {
-        String rawQuery =
-        "SELECT * " +
-        "FROM ITEMSTATUS WHERE ITEMSTATUS.orderid IN ( " +
-        "SELECT orderid " +
-        "FROM " +
-        "   (SELECT USERS.login, " +
-        "           ORDERS.orderid " +
-        "   FROM ORDERS " +
-        "   LEFT JOIN USERS ON ORDERS.login=USERS.login) AS ORDERHISTORY WHERE ORDERHISTORY.login='%s') " +
-        "ORDER BY lastUpdated";
-        String query = String.format(rawQuery, this.login);
+        String query = String.format(Queries.USER_FETCH_ORDER_HISTORY,
+                this.login);
 
         Set<Integer> orderIDSet = new HashSet<>();
-        CafeSQLManager.executeQuery(query).forEach(orderData -> orderIDSet.add(Integer.parseInt(orderData.get(0))));
+        CafeSQLManager.executeQuery(query)
+                .forEach(orderData -> orderIDSet.add(Integer.parseInt(orderData.get(0))));
 
         List<Order> orderHistory = new ArrayList<>();
         orderIDSet.forEach(orderID -> orderHistory.add(new Order(this, orderID)));
@@ -119,7 +114,9 @@ public class User {
 
     public static User login(String username, String password) {
 
-        String query = String.format("SELECT * FROM USERS WHERE login = '%s' AND password = '%s'", username, password);
+        String query = String.format(Queries.USER_LOGIN_QUERY,
+                username,
+                password);
 
         List<List<String>> results = CafeSQLManager.executeQuery(query);
 
@@ -128,10 +125,6 @@ public class User {
         }
 
         return (results != null && results.size() > 0) ? new User(results.get(0)) : null;
-    }
-
-    public enum CreateUserResults {
-        SUCCESS, USERNAME_TAKEN, PHONE_NUMBER_TAKEN
     }
 
     public static boolean createUser(User user) {
@@ -143,14 +136,18 @@ public class User {
     }
 
     public static boolean createUser(String login, String password, String phone, String favItems, String type) {
-        String rawQuery = "INSERT INTO USERS (phoneNum, login, password, favItems, type) VALUES ('%s','%s','%s','%s','%s')";
-        String query = String.format(rawQuery, phone, login, password, favItems, type);
+        String query = String.format(Queries.USER_CREATE_USER_QUERY,
+                phone,
+                login,
+                password,
+                favItems,
+                type);
 
         return CafeSQLManager.executeUpdate(query);
     }
 
     public boolean updateDB() {
-        String query = String.format("UPDATE USERS SET password='%s', phonenum='%s', favitems='%s', type='%s' WHERE login='%s'",
+        String query = String.format(Queries.USER_UPDATE_DB_QUERY,
                 this.password,
                 this.phoneNumber,
                 String.join(",", this.favItems),

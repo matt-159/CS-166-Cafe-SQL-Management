@@ -10,8 +10,9 @@
  *
  */
 
+import data.User;
 import gui.CafeApplication;
-import gui.CafeApplication.*;
+import gui.CafeApplication.AppStates;
 import gui.DebugPanel;
 import util.CafeSQLManager;
 

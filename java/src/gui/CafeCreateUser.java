@@ -3,6 +3,7 @@ package gui;
 import data.Menu;
 import data.User;
 import util.CafeSQLManager;
+import util.Queries;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,11 +17,11 @@ public class CafeCreateUser extends JPanel {
 
     private static final int TEXTFIELD_WIDTH = 20;
 
-    private JButton submit, back;
-    private JLabel usernameLabel, passwordLabel1, passwordLabel2, phoneNumLabel, favItemsLabel;
-    private JTextField username, password1, password2, phoneNum;
+    private final JButton submit, back;
+    private final JLabel usernameLabel, passwordLabel1, passwordLabel2, phoneNumLabel, favItemsLabel;
+    private final JTextField username, password1, password2, phoneNum;
 
-    private JLabel requiredFieldsMessage, errorMessage;
+    private final JLabel requiredFieldsMessage, errorMessage;
 
     public CafeCreateUser() {
         super();
@@ -89,8 +90,8 @@ public class CafeCreateUser extends JPanel {
         }
 
         private boolean validateUsernameAndPhoneNumber() {
-            String rawQuery = "SELECT * FROM USERS WHERE login='%s'";
-            String query = String.format(rawQuery, this.parent.username.getText());
+            String query = String.format(Queries.CAFE_CREATE_USER_CHECK_LOGIN_QUERY,
+                    this.parent.username.getText());
 
             if (!CafeSQLManager.isEmptyResultSet(CafeSQLManager.executeQuery(query))) {
                 parent.errorMessage.setText("This username is already taken");
@@ -99,8 +100,8 @@ public class CafeCreateUser extends JPanel {
                 return false;
             }
 
-            rawQuery = "SELECT * FROM USERS WHERE phoneNum='%s'";
-            query = String.format(rawQuery, this.parent.phoneNum.getText());
+            query = String.format(Queries.CAFE_CREATE_USER_CHECK_PHONE_NUM_QUERY,
+                    this.parent.phoneNum.getText());
 
             if (!CafeSQLManager.isEmptyResultSet(CafeSQLManager.executeQuery(query))) {
                 parent.errorMessage.setText("This phone number is already in use");

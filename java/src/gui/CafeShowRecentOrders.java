@@ -55,15 +55,6 @@ public class CafeShowRecentOrders extends JPanel {
         this.add(back, c);
     }
 
-    private List<ItemStatus> getItemStatusList() {
-        String query = "SELECT * FROM ITEMSTATUS ORDER BY lastupdated DESC";
-
-        List<ItemStatus> list = new ArrayList<>();
-        CafeSQLManager.executeQuery(query).forEach(data -> list.add(new ItemStatus(data)));
-
-        return list;
-    }
-
     private class CafeUpdateItemStatusActionListener implements ActionListener {
 
         @Override

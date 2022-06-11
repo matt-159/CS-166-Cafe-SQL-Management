@@ -21,8 +21,6 @@ public class CafeViewProfile extends JPanel {
     private JLabel passwordLabel1, phoneNumLabel, favItemsLabel;
     private JTextField password, phoneNum;
 
-    private JLabel requiredFieldsMessage, errorMessage;
-
     public CafeViewProfile(User user) {
         super(new GridLayout(0, 1));
 

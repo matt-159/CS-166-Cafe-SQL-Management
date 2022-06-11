@@ -1,6 +1,7 @@
 package data;
 
 import util.CafeSQLManager;
+import util.Queries;
 
 import java.util.*;
 
@@ -14,9 +15,7 @@ public class Menu {
 
     public static Menu getInstance() {
         if (instance == null || instance.isDirty) {
-            String query = "SELECT * FROM MENU";
-
-            instance = new Menu(CafeSQLManager.executeQuery(query));
+            instance = new Menu(CafeSQLManager.executeQuery(Queries.MENU_GET_INSTANCE_QUERY));
         }
 
         return instance;
@@ -73,10 +72,12 @@ public class Menu {
                                          double price,
                                          String description,
                                          String imageURL) {
-        String rawQuery =
-        "INSERT INTO MENU (itemName, type, price, description, imageURL) " +
-        "VALUES ('%s', '%s', %.2f, '%s', '%s')";
-        String query = String.format(rawQuery, itemName, type, price, description, imageURL);
+        String query = String.format(Queries.MENU_ADD_NEW_MENU_ITEM_QUERY,
+                itemName,
+                type,
+                price,
+                description,
+                imageURL);
 
         instance.menuItems.add(new MenuItem(itemName, type, price, description, imageURL));
 

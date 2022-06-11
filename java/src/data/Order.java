@@ -1,6 +1,7 @@
 package data;
 
 import util.CafeSQLManager;
+import util.Queries;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -46,11 +47,9 @@ public class Order {
     }
 
     private void getOrderInfo() {
-        String rawQuery =
-        "SELECT * " +
-        "FROM ORDERS " +
-        "WHERE login='%s' AND orderid='%d'";
-        String query = String.format(rawQuery, this.user.getLogin(), this.orderID);
+        String query = String.format(Queries.ORDER_GET_ORDER_INFO_QUERY,
+                this.user.getLogin(),
+                this.orderID);
 
         List<String> orderInfo = CafeSQLManager.executeQuery(query).get(0);
 
@@ -60,20 +59,9 @@ public class Order {
     }
 
     private List<ItemStatus> getItemStatusInfo() {
-        String rawQuery =
-        "SELECT * " +
-        "FROM ITEMSTATUS " +
-        "WHERE ITEMSTATUS.orderid IN ( " +
-        "   SELECT orderid " +
-        "   FROM " +
-        "       (SELECT USERS.login, " +
-        "               ORDERS.orderid " +
-        "       FROM ORDERS " +
-        "       LEFT JOIN USERS ON ORDERS.login=USERS.login) AS ORDERHISTORY " +
-        "           WHERE ORDERHISTORY.login='%s' " +
-        "               AND ITEMSTATUS.orderid='%d')";
-
-        String query = String.format(rawQuery, user.getLogin(), this.orderID);
+        String query = String.format(Queries.ORDER_GET_ITEMSTATUS_INFO_QUERY,
+                user.getLogin(),
+                this.orderID);
 
         List<ItemStatus> itemInfo = new ArrayList<>();
         CafeSQLManager.executeQuery(query).forEach(item -> itemInfo.add(new ItemStatus(item)));
@@ -106,7 +94,7 @@ public class Order {
     }
 
     public boolean updateDB() {
-        String query = String.format("UPDATE ORDERS SET login='%s', paid='%s', timestampRecieved='%s', total='%.2f' WHERE orderid='%d'",
+        String query = String.format(Queries.ORDER_UPDATEDB_QUERY,
             this.user.getLogin(),
             this.isPaid,
             this.timestampReceived,
@@ -125,11 +113,10 @@ public class Order {
     }
 
     public static int placeNewOrder(String login, double total) {
-        List<String> info = CafeSQLManager.executeQuery("SELECT COUNT(orderid) + 1 FROM ORDERS").get(0);
+        List<String> info = CafeSQLManager.executeQuery(Queries.ORDER_PLACE_NEW_ORDER_GET_NUM_ORDERS_QUERY).get(0);
         int orderid = Integer.parseInt(info.get(0));
 
-        String rawQuery = "INSERT INTO ORDERS (orderid, login, paid, timestampRecieved, total) VALUES (%d, '%s', '%s', '%s', %.2f)";
-        String query = String.format(rawQuery,
+        String query = String.format(Queries.ORDER_PLACE_NEW_ORDER_QUERY,
                 orderid,
                 login,
                 "f",
@@ -142,10 +129,9 @@ public class Order {
     }
 
     public static List<Order> getRecentOrders() {
-        String query = "SELECT * FROM ORDERS WHERE timestampRecieved >= CURRENT_DATE - 1";
-
         List<Order> orders = new ArrayList<>();
-        CafeSQLManager.executeQuery(query).forEach(data -> orders.add(new Order(null, Integer.parseInt(data.get(0)))));
+        CafeSQLManager.executeQuery(Queries.ORDER_GET_RECENT_ORDERS_QUERY)
+                .forEach(data -> orders.add(new Order(null, Integer.parseInt(data.get(0)))));
 
         return orders;
     }

@@ -3,6 +3,7 @@ package gui;
 import data.ItemStatus;
 import data.User;
 import util.CafeSQLManager;
+import util.Queries;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -61,10 +62,9 @@ public class CafeUpdateItemStatus extends JPanel {
     }
 
     private List<ItemStatus> getItemStatusList() {
-        String query = "SELECT * FROM ITEMSTATUS ORDER BY lastupdated DESC";
-
         List<ItemStatus> list = new ArrayList<>();
-        CafeSQLManager.executeQuery(query).forEach(data -> list.add(new ItemStatus(data)));
+        CafeSQLManager.executeQuery(Queries.CAFE_UPDATE_ITEMSTATUS_GET_ITEMSTATUS_LIST_QUERY)
+                .forEach(data -> list.add(new ItemStatus(data)));
 
         return list;
     }
@@ -200,7 +200,6 @@ public class CafeUpdateItemStatus extends JPanel {
             if (e.isPopupTrigger()) {
                 System.out.printf("Showing popup at (x: %d, y: %d)\n", e.getX(), e.getYOnScreen());
                 Point p = table.getMousePosition();
-//                p.x += jtable.getX();
 
                 table.changeSelection(table.rowAtPoint(p), 0, false, false);
 

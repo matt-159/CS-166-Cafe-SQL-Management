@@ -1,6 +1,7 @@
 package data;
 
 import util.CafeSQLManager;
+import util.Queries;
 
 import java.util.List;
 
@@ -67,8 +68,7 @@ public class MenuItem {
     }
 
     public boolean updateDB() {
-        String rawQuery = "UPDATE MENU SET type='%s', price='%.2f', description='%s', imageURL='%s' WHERE itemName='%s'";
-        String query = String.format(rawQuery,
+        String query = String.format(Queries.MENUITEM_UPDATEDB_QUERY,
                 this.type,
                 this.price,
                 this.description,

@@ -10,7 +10,6 @@
  *
  */
 
-import data.User;
 import gui.CafeApplication;
 import gui.CafeApplication.AppStates;
 import gui.DebugPanel;
@@ -20,10 +19,15 @@ public class CS_166_Project {
 
     public static void main(String[] args) {
 
-        String dbhost = args[0];
-        String dbname = args[1];
-        String dbport = args[2];
-        String user = args[3];
+        if (args.length != 5) {
+            System.out.println("Required arguments are: <DB Host> <DB Name> <DB Port> <User> <Password>");
+            System.exit(-1);
+        }
+
+        String dbhost   = args[0];
+        String dbname   = args[1];
+        String dbport   = args[2];
+        String user     = args[3];
         String password = args[4];
 
         javax.swing.SwingUtilities.invokeLater(() -> {

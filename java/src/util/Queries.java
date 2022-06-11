@@ -117,8 +117,8 @@ public final class Queries {
 
     public static final String CAFE_UPDATE_ITEMSTATUS_GET_ITEMSTATUS_LIST_QUERY =
         "SELECT * " +
-        "FROM USERS " +
-        "WHERE phoneNum='%s'";
+        "FROM ITEMSTATUS " +
+        "ORDER BY lastupdated DESC";
 
     public static final String CAFE_UPDATE_MENU_DELETE_MENUITEM_QUERY =
         "DELETE " +

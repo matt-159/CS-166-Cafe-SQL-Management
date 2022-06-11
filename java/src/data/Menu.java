@@ -10,9 +10,10 @@ public class Menu {
 
     private ArrayList<MenuItem> menuItems;
     private Set<String> categories;
+    private boolean isDirty;
 
     public static Menu getInstance() {
-        if (instance == null) {
+        if (instance == null || instance.isDirty) {
             String query = "SELECT * FROM MENU";
 
             instance = new Menu(CafeSQLManager.executeQuery(query));
@@ -23,6 +24,7 @@ public class Menu {
 
     private Menu(List<List<String>> menuItemList) {
         updateMenu(menuItemList);
+        this.isDirty = false;
     }
 
     public Map<String, MenuItem> getMenu() {
@@ -45,17 +47,15 @@ public class Menu {
 
     public void updateMenu(List<List<String>> menuItemList) {
         this.categories = new HashSet<>();
-        this.menuItems = menuItemListToMap(menuItemList);
+        this.menuItems = getMenuItems(menuItemList);
 
         this.menuItems.forEach(menuItem -> categories.add(menuItem.getType()));
     }
 
-    private ArrayList<MenuItem> menuItemListToMap(List<List<String>> menuItemList) {
+    private ArrayList<MenuItem> getMenuItems(List<List<String>> menuItemList) {
         ArrayList<MenuItem> menuItems = new ArrayList<>();
 
-        menuItemList.forEach(menuItem -> {
-            menuItems.add(new MenuItem(menuItem));
-        });
+        menuItemList.forEach(menuItem -> menuItems.add(new MenuItem(menuItem)));
 
         return menuItems;
     }
@@ -81,5 +81,9 @@ public class Menu {
         instance.menuItems.add(new MenuItem(itemName, type, price, description, imageURL));
 
         return CafeSQLManager.executeUpdate(query);
+    }
+
+    public void invalidate() {
+        this.isDirty = true;
     }
 }
